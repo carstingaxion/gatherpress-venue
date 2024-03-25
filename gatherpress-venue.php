@@ -27,11 +27,29 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function bootstrap(): void {
+
+	require_once __DIR__ . '/includes/core/classes/class-venue.php';
+	require_once __DIR__ . '/includes/query-loop.php';
+
 	\add_action( 'init', __NAMESPACE__ . '\\register_assets', 1 );
 
 	\add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_assets' );
 
-	\add_filter( 'render_block_core/group', __NAMESPACE__ . '\\debug_query_block', 10, 3 );
+	// \add_action( 'after_setup_theme', 'twentytwentytwo_support' );
+
+	// \add_filter( 'render_block_core/query', __NAMESPACE__ . '\\debug_query_block', 10, 3 );
+		
+	add_filter( 'the_title', function ( $title, $id = null ) {
+
+		$post = \get_post($id);
+	
+		return sprintf(
+			'<pre>%s:%s</pre> %s',
+			$post->post_type,
+			$post->ID,
+			$title
+		);
+	}, 10, 2 );
 }
 bootstrap();
 
@@ -79,6 +97,20 @@ function enqueue_assets(): void {
 			'variations',
 		]
 	);
+
+
+	/*
+		* Load additional block styles.
+		*/
+	$block_name = 'query-variation--venue';
+	$index_css = "build/variations/variations.css";
+	$args = array(
+		'handle' => "gp-$block_name",
+		// 'src'    => get_theme_file_uri( "assets/css/blocks/$block_name.css" ),
+		'src'    => plugins_url( $index_css, __FILE__ ),
+	);
+	wp_enqueue_block_style( "core/post-template", $args );
+	// wp_enqueue_style( $args['handle'], $args['src'] );
 }
 
 /**
@@ -157,6 +189,7 @@ function debug_query_block( $block_content, $parsed_block, $block_instance ) {
 		return $block_content;
 	}
 
+
 	if ( ! isset( $parsed_block['attrs']['className'] ) || false === \strpos( $parsed_block['attrs']['className'], 'gp-venue-v2' ) ) {
 		return $block_content;
 	}
@@ -165,3 +198,5 @@ function debug_query_block( $block_content, $parsed_block, $block_instance ) {
 
 	return $block_content;
 }
+
+
