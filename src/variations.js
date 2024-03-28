@@ -23,11 +23,6 @@ import { createHigherOrderComponent } from '@wordpress/compose';
 import { addFilter } from '@wordpress/hooks';
 
 
-import {
-	useBlockProps,
-} from '@wordpress/block-editor';
-
-
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, PanelRow } from '@wordpress/components';
 
@@ -35,9 +30,6 @@ import { PanelBody, PanelRow } from '@wordpress/components';
  * Internal dependencies
  */
 import { VenueCombobox } from './components/VenueCombobox';
-import EditUpdater from './components/EditUpdater';
-import NoResultsUpdater from './components/NoResultsUpdater';
-import PostTemplateUpdater from './components/PostTemplateUpdater';
 
 import { getCurrentContextualPostId } from './helpers/globals';
 
@@ -50,12 +42,6 @@ import { getVenuePostFromEventId } from './helpers/venue'
 
 import { VenueContext } from './components/VenueContext';
 import { useContext } from '@wordpress/element'
-
-
-
-
-import { useEffect } from '@wordpress/element';
-import { useSelect } from '@wordpress/data';
 
 
 

@@ -1,13 +1,11 @@
 /**
  * WordPress dependencies
  */
-import { InspectorControls } from '@wordpress/block-editor';
-import { ComboboxControl, PanelBody, PanelRow } from '@wordpress/components';
+import { ComboboxControl } from '@wordpress/components';
 import { useEntityRecords, useEntityProp } from '@wordpress/core-data';
 import { useState, useCallback } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
-import { useDispatch, dispatch } from '@wordpress/data';
 
 /**
  * Internal dependencies.

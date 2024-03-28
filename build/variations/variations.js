@@ -2,92 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/components/EditUpdater.js":
-/*!***************************************!*\
-  !*** ./src/components/EditUpdater.js ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
-/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _helpers_globals__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../helpers/globals */ "./src/helpers/globals.js");
-/* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../helpers/event */ "./src/helpers/event.js");
-/* harmony import */ var _helpers_venue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../helpers/venue */ "./src/helpers/venue.js");
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies.
- */
-
-
-
-
-/**
- * EditUpdater component for GatherPress.
- *
- * This component is used to ...
- *
- * @since 0.30.0
- *
- * @param {Object}  props            - Component properties.
- *
- * @return {JSX.Element} The rendered React component.
- */
-const EditUpdater = props => {
-  const isDescendentOfQueryLoop = Number.isFinite(props?.context?.queryId);
-
-  // console.log(isEventPostType(props?.context?.postType));
-  // Checks to see if either the given contextual 
-  // or the currently edited post is of type 'gp_event'.
-  if (!(0,_helpers_event__WEBPACK_IMPORTED_MODULE_4__.isEventPostType)(props?.context?.postType) || isDescendentOfQueryLoop) {
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, props.children);
-  }
-
-  // console.log(props);	
-
-  // If this 'venue' block is on the root-level of a 'gp_event' post,
-  // the desired post is the currently edited post.
-  // Alternatively the block could be part of a `core/query` block, 
-  // then props.context provides `postType` and `postId` to use.
-  const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_3__.getCurrentContextualPostId)(props?.context?.postId);
-  console.log('We are in the right spot now.');
-  console.log(props?.context);
-  const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_1__.useEntityProp)('postType', 'gp_event', '_gp_venue', cId);
-  /* 
-  	useEffect(() => {
-  		// console.log(venueTaxonomyIds.length);
-  		console.info(cId);
-  		console.log(venueTaxonomyIds);
-  		
-  		const newAttributes = {
-  			...props.attributes,
-  		};
-  		props.setAttributes(newAttributes);
-  
-  	}, [
-  		venueTaxonomyIds,
-  	]);
-   */
-
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, props.children);
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (EditUpdater);
-
-/***/ }),
-
 /***/ "./src/components/VenueCombobox.js":
 /*!*****************************************!*\
   !*** ./src/components/VenueCombobox.js ***!
@@ -100,28 +14,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/block-editor */ "@wordpress/block-editor");
-/* harmony import */ var _wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
-/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
-/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var _helpers_globals__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./../helpers/globals */ "./src/helpers/globals.js");
-/* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./../helpers/event */ "./src/helpers/event.js");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/compose */ "@wordpress/compose");
+/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _helpers_globals__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../helpers/globals */ "./src/helpers/globals.js");
+/* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../helpers/event */ "./src/helpers/event.js");
 
 /**
  * WordPress dependencies
  */
-
-
 
 
 
@@ -149,13 +57,13 @@ const TAX_VENUE_SHADOW = '_gp_venue';
  * @returns Combobox component with our venues selectable.
  */
 const VenueCombobox = props => {
-  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useState)('');
-  const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_8__.getCurrentContextualPostId)(props?.context?.postId);
-  const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__.useEntityProp)('postType', 'gp_event', '_gp_venue', cId);
+  const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)('');
+  const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_6__.getCurrentContextualPostId)(props?.context?.postId);
+  const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityProp)('postType', 'gp_event', '_gp_venue', cId);
   const {
     isResolvingTerms,
     records: terms
-  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__.useEntityRecords)('taxonomy', '_gp_venue', {
+  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityRecords)('taxonomy', '_gp_venue', {
     context: 'view',
     per_page: 10,
     search
@@ -163,20 +71,20 @@ const VenueCombobox = props => {
   const {
     isResolvingPosts,
     records: posts
-  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__.useEntityRecords)('postType', 'gp_venue', {
+  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityRecords)('postType', 'gp_venue', {
     context: 'view',
     per_page: 10,
     search
   });
-  const setSearchDebounced = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__.useDebounce)(value => {
+  const setSearchDebounced = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_4__.useDebounce)(value => {
     setSearch(value);
   }, 300);
 
   // console.log('venueTaxonomyIds',venueTaxonomyIds);
   const setOptions = () => {
-    if ((0,_helpers_event__WEBPACK_IMPORTED_MODULE_9__.isEventPostType)(props?.context?.postType)) {
+    if ((0,_helpers_event__WEBPACK_IMPORTED_MODULE_7__.isEventPostType)(props?.context?.postType)) {
       return isResolvingTerms ? [{
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Loading&hellip;', 'gatherpress'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Loading&hellip;', 'gatherpress'),
         value: 'loading'
       }] : terms?.map(term => ({
         label: 'TERM ' + term?.name,
@@ -184,7 +92,7 @@ const VenueCombobox = props => {
       })) || [];
     } else {
       return isResolvingPosts ? [{
-        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Loading&hellip;', 'gatherpress'),
+        label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Loading&hellip;', 'gatherpress'),
         value: 'loading'
       }] : posts?.map(post => ({
         label: 'POST ' + post?.title.rendered,
@@ -192,10 +100,10 @@ const VenueCombobox = props => {
       })) || [];
     }
   };
-  const update = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.useCallback)(value => {
+  const update = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(value => {
     // console.log('handleVenueTaxChange = useCallback',{value, props});
 
-    if ((0,_helpers_event__WEBPACK_IMPORTED_MODULE_9__.isEventPostType)(props?.context?.postType)) {
+    if ((0,_helpers_event__WEBPACK_IMPORTED_MODULE_7__.isEventPostType)(props?.context?.postType)) {
       // console.log(value);
       // console.log(Number.isFinite( value ));
 
@@ -232,16 +140,16 @@ const VenueCombobox = props => {
   // };
 
   const setValue = () => {
-    if ((0,_helpers_event__WEBPACK_IMPORTED_MODULE_9__.isEventPostType)(props?.context?.postType)) {
+    if ((0,_helpers_event__WEBPACK_IMPORTED_MODULE_7__.isEventPostType)(props?.context?.postType)) {
       return venueTaxonomyIds?.[0] || 'loading';
     } else {
       return props?.attributes?.selectedPostId || 'loading';
     }
   };
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ComboboxControl
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ComboboxControl
   // allowReset={false}
   , {
-    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__)('Choose a venue', 'gatherpress'),
+    label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Choose a venue', 'gatherpress'),
     __next40pxDefaultSize: true,
     onChange: value => {
       // console.log('onChange',{value, props});
@@ -623,19 +531,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _components_VenueCombobox__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/VenueCombobox */ "./src/components/VenueCombobox.js");
-/* harmony import */ var _components_EditUpdater__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/EditUpdater */ "./src/components/EditUpdater.js");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './components/NoResultsUpdater'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-Object(function webpackMissingModule() { var e = new Error("Cannot find module './components/PostTemplateUpdater'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-/* harmony import */ var _helpers_globals__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./helpers/globals */ "./src/helpers/globals.js");
-/* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./helpers/event */ "./src/helpers/event.js");
-/* harmony import */ var _helpers_venue__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./helpers/venue */ "./src/helpers/venue.js");
-/* harmony import */ var _components_VenueContext__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/VenueContext */ "./src/components/VenueContext.js");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
-/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_16__);
+/* harmony import */ var _helpers_globals__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./helpers/globals */ "./src/helpers/globals.js");
+/* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers/event */ "./src/helpers/event.js");
+/* harmony import */ var _helpers_venue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./helpers/venue */ "./src/helpers/venue.js");
+/* harmony import */ var _components_VenueContext__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/VenueContext */ "./src/components/VenueContext.js");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_13__);
 
 /**
  * WordPress dependencies
@@ -663,15 +566,9 @@ Object(function webpackMissingModule() { var e = new Error("Cannot find module '
 
 
 
-
 /**
  * Internal dependencies
  */
-
-
-
-
-
 
 
 
@@ -733,7 +630,7 @@ function extendGroupBlock(settings, name) {
   settings.usesContext.indexOf('queryId') === -1 && settings.usesContext.push('queryId');
   settings.usesContext.indexOf('postId') === -1 && settings.usesContext.push('postId');
   settings.usesContext.indexOf('postType') === -1 && settings.usesContext.push('postType');
-  const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_10__.getCurrentContextualPostId)(null);
+  const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_8__.getCurrentContextualPostId)(null);
   const newSettings = {
     ...settings,
     attributes: {
@@ -777,7 +674,7 @@ function extendGroupBlock(settings, name) {
     // if (props.name !== 'core/post-title') {
     // 	return <BlockEdit {...props} />;
     // }
-    const x = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_14__.useContext)(_components_VenueContext__WEBPACK_IMPORTED_MODULE_13__.VenueContext);
+    const x = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_12__.useContext)(_components_VenueContext__WEBPACK_IMPORTED_MODULE_11__.VenueContext);
 
     // console.log(props.name, x)
     // console.log(props.name, props?.context);
@@ -818,23 +715,23 @@ const venueEdit = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHighe
     // the desired post is the currently edited post.
     // Alternatively the block could be part of a `core/query` block, 
     // then props.context provides `postType` and `postId` to use.
-    const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_10__.getCurrentContextualPostId)(props?.context?.postId);
-    const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_16__.useEntityProp)('postType', 'gp_event', '_gp_venue', cId);
+    const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_8__.getCurrentContextualPostId)(props?.context?.postId);
+    const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_13__.useEntityProp)('postType', 'gp_event', '_gp_venue', cId);
     const {
       isSelected
     } = props;
     const isDescendentOfQueryLoop = Number.isFinite(props?.context?.queryId);
-    const isEventContext = (0,_helpers_event__WEBPACK_IMPORTED_MODULE_11__.isEventPostType)(props?.context?.postType);
+    const isEventContext = (0,_helpers_event__WEBPACK_IMPORTED_MODULE_9__.isEventPostType)(props?.context?.postType);
     const isAutoContext = isDescendentOfQueryLoop || isEventContext;
 
     // console.log(props.name, props);
 
     let venuePost;
     if (isEventContext) {
-      venuePost = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_12__.getVenuePostFromEventId)(cId);
+      venuePost = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromEventId)(cId);
       if (!isDescendentOfQueryLoop) {
         if (venueTaxonomyIds && Number.isFinite(venueTaxonomyIds[0])) {
-          venuePost = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_12__.getVenuePostFromTermId)(venueTaxonomyIds[0]);
+          venuePost = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromTermId)(venueTaxonomyIds[0]);
           // console.log('venueTaxonomyIds', venueTaxonomyIds);
           // console.log('venuePost', venuePost);
         }
@@ -844,7 +741,7 @@ const venueEdit = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_3__.createHighe
     if (venuePost && venuePost.length >= 1 && Number.isFinite(venuePost[0].id)) {
       venuePostContext = venuePost[0].id; // working !
     }
-    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, venuePostContext && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_VenueContext__WEBPACK_IMPORTED_MODULE_13__.VenueContext.Provider, {
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, venuePostContext && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_VenueContext__WEBPACK_IMPORTED_MODULE_11__.VenueContext.Provider, {
       value: venuePostContext
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockEdit, {
       ...props
