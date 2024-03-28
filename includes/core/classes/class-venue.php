@@ -30,7 +30,7 @@ function get_venue_post_id_from_event_post_id( int $post_id ) : ?int {
 		return null;
 	}
 	// Assuming that we have only ONE venue related.
-	return get_venue_post_id_from_term_id( $venue_terms[0]->ID );
+	return get_venue_post_id_from_term_id( $venue_terms[0]->term_id );
 }
 
 

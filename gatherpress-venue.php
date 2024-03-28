@@ -29,7 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 function bootstrap(): void {
 
 	require_once __DIR__ . '/includes/core/classes/class-venue.php';
-	require_once __DIR__ . '/includes/query-loop.php';
+	// require_once __DIR__ . '/includes/query-loop.php';
+	require_once __DIR__ . '/includes/group.php';
 
 	\add_action( 'init', __NAMESPACE__ . '\\register_assets', 1 );
 
@@ -37,19 +38,24 @@ function bootstrap(): void {
 
 	// \add_action( 'after_setup_theme', 'twentytwentytwo_support' );
 
-	// \add_filter( 'render_block_core/query', __NAMESPACE__ . '\\debug_query_block', 10, 3 );
+	// \add_filter( 'render_block_core/group', __NAMESPACE__ . '\\debug_group_block', 10, 3 );
 		
-	add_filter( 'the_title', function ( $title, $id = null ) {
+	// add_filter(
+	// 'the_title',
+	// function ( $title, $id = null ) {
 
-		$post = \get_post($id);
+	// $post = \get_post( $id );
 	
-		return sprintf(
-			'<pre>%s:%s</pre> %s',
-			$post->post_type,
-			$post->ID,
-			$title
-		);
-	}, 10, 2 );
+	// return sprintf(
+	// '<pre>%s:%s</pre> %s',
+	// $post->post_type,
+	// $post->ID,
+	// $title
+	// );
+	// },
+	// 10,
+	// 2 
+	// );
 }
 bootstrap();
 
@@ -101,7 +107,7 @@ function enqueue_assets(): void {
 
 	/*
 		* Load additional block styles.
-		*/
+
 	$block_name = 'query-variation--venue';
 	$index_css = "build/variations/variations.css";
 	$args = array(
@@ -110,7 +116,7 @@ function enqueue_assets(): void {
 		'src'    => plugins_url( $index_css, __FILE__ ),
 	);
 	wp_enqueue_block_style( "core/post-template", $args );
-	// wp_enqueue_style( $args['handle'], $args['src'] );
+	// wp_enqueue_style( $args['handle'], $args['src'] );       */
 }
 
 /**
@@ -184,8 +190,8 @@ function register_asset( string $asset ): void {
  *
  * @param string $block_content The content being rendered by the block.
  */
-function debug_query_block( $block_content, $parsed_block, $block_instance ) {
-	if ( ! isset( $parsed_block['blockName'] ) || 'core/query' !== $parsed_block['blockName'] ) {
+function debug_group_block( $block_content, $parsed_block, $block_instance ) {
+	if ( ! isset( $parsed_block['blockName'] ) || 'core/group' !== $parsed_block['blockName'] ) {
 		return $block_content;
 	}
 
@@ -198,5 +204,3 @@ function debug_query_block( $block_content, $parsed_block, $block_instance ) {
 
 	return $block_content;
 }
-
-
