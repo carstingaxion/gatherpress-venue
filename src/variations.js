@@ -30,6 +30,8 @@ import { PanelBody, PanelRow } from '@wordpress/components';
  * Internal dependencies
  */
 import { VenueCombobox } from './components/VenueCombobox';
+import { VenuePostsCombobox } from './components/VenuePostsCombobox';
+import { VenueTermsCombobox } from './components/VenueTermsCombobox';
 
 import { getCurrentContextualPostId } from './helpers/globals';
 
@@ -49,6 +51,14 @@ import { useEntityProp } from '@wordpress/core-data';
 
 
 import { getVenuePostFromTermId } from './helpers/venue';
+
+
+
+
+// slot fills
+import { registerPlugin } from '@wordpress/plugins';
+import VenueBlockPluginFill from './slotfill';
+
 
 
 
@@ -84,8 +94,8 @@ const venuePortalGroup = {
 
 		// is neccessary to make isActive work !!
 		// @see https://github.com/WordPress/gutenberg/issues/41303#issuecomment-1526193087
-		// layout: { type: 'flex', orientation: 'nonsense' }, // works
-		layout: { type: 'constrained' }, // does not work!
+		layout: { type: 'flex', orientation: 'nonsense' }, // works
+		// layout: { type: 'constrained' }, // does not work!
 	},
 
 	isActive: ( blockAttrs, variationAttrs ) => {
@@ -214,6 +224,21 @@ addFilter(
 	}),
 );
 
+const VenueComboboxProvider = (props=null) => {
+	const isEventContext = isEventPostType(props?.context?.postType);
+	return (
+		<>
+			{ isEventContext && (
+				// <VenueCombobox {...props} />
+				<VenueTermsCombobox {...props} />
+				)}
+			{ ! isEventContext && (
+				<VenuePostsCombobox {...props} />
+			)}
+		</>
+	);
+}
+
 const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 
 	
@@ -242,11 +267,6 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 		const isDescendentOfQueryLoop = Number.isFinite( props?.context?.queryId );
 		const isEventContext = isEventPostType(props?.context?.postType);
 
-		const isAutoContext = ( 
-			( isDescendentOfQueryLoop || isEventContext )
-		)
-
-// console.log(props.name, props);
 
 		let venuePost;
 		if ( isEventContext ) {
@@ -309,7 +329,13 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 							initialOpen={true}
 						>
 							<PanelRow>
-								<VenueCombobox {...props} />
+								{/* { isEventContext && (
+									<VenueCombobox {...props} />
+								)}
+								{ ! isEventContext && (
+									<VenuePostsCombobox {...props} />
+								)} */}
+								<VenueComboboxProvider {...props} />
 							</PanelRow>
 						</PanelBody>
 					</InspectorControls>
@@ -336,3 +362,6 @@ addFilter(
 );
 
 
+
+
+registerPlugin('venue-block-slot-fill', { render: VenueBlockPluginFill });
