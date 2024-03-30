@@ -44,7 +44,6 @@ const VenueComboboxProvider = (props=null) => {
 	return (
 		<>
 			{ isEventContext && (
-				// <VenueCombobox {...props} />
 				<VenueTermsCombobox {...props} />
 				)}
 			{ ! isEventContext && (
@@ -73,8 +72,8 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 
 		const [ venueTaxonomyIds, updateVenueTaxonomyIds ] = useEntityProp(
 			'postType',
-			'gp_event',
-			'_gp_venue',
+			PT_EVENT,
+			TAX_VENUE_SHADOW,
 			cId
 		);
 		
@@ -82,21 +81,16 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 		const isDescendentOfQueryLoop = Number.isFinite( props?.context?.queryId );
 		const isEventContext = isEventPostType(props?.context?.postType);
 
+        const isEditableEventContext = ! isDescendentOfQueryLoop && venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] );
 
-		let venuePost;
-		if ( isEventContext ) {
-			venuePost = getVenuePostFromEventId( cId );
+        console.log('isEditableEventContext', isEditableEventContext  );
+let venuePost;
+console.log(venuePost);
+        venuePost = isEditableEventContext
+            ? getVenuePostFromTermId( venueTaxonomyIds[0] )
+            : ( isEventContext ? getVenuePostFromEventId( cId ) : null );
+console.log(venuePost);
 
-			if ( ! isDescendentOfQueryLoop ) {
-
-				if ( venueTaxonomyIds && Number.isFinite( venueTaxonomyIds[0] ) ) {
-					venuePost = getVenuePostFromTermId( venueTaxonomyIds[0] );
-					// console.log('venueTaxonomyIds', venueTaxonomyIds);
-					// console.log('venuePost', venuePost);
-				}
-			}
-
-		}
 
 		let venuePostContext = props?.attributes?.selectedPostId;
 		if (

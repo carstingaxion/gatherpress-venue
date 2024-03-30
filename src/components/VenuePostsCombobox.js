@@ -14,9 +14,10 @@ import { getCurrentContextualPostId } from './../helpers/globals'
 import { isEventPostType } from './../helpers/event'
 
 
-const PT_EVENT = 'gp_event';
-const PT_VENUE = 'gp_venue';
-const TAX_VENUE_SHADOW = '_gp_venue';
+// const PT_EVENT = 'gp_event';
+// const PT_VENUE = 'gp_venue';
+// const TAX_VENUE_SHADOW = '_gp_venue';
+import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
 
 /**
  * This component shows a list of selectable venues.
@@ -68,7 +69,7 @@ const VenuePostsCombobox = (props) => {
 				label: 'POST ' + post?.title.rendered,
 				value: post?.id,
 			})) || [];
-		  }, [ venuePosts ] );
+		}, [ venuePosts ] );
 
 		return isResolvingPosts
 			? [
@@ -80,11 +81,6 @@ const VenuePostsCombobox = (props) => {
 						value: 'loading',
 					},
 			]
-			// : venuePosts?.map((post) => ({
-
-			// 		label: 'POST ' + post?.title.rendered,
-			// 		value: post?.id,
-			// })) || [];
 			: venuePostsAsOptions;
 		
 	}

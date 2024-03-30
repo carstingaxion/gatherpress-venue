@@ -3,7 +3,7 @@
  */
 import { ComboboxControl } from '@wordpress/components';
 import { useEntityRecords, useEntityProp } from '@wordpress/core-data';
-import { useState, useCallback } from '@wordpress/element';
+import { useState, useCallback, useMemo } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
@@ -14,9 +14,10 @@ import { getCurrentContextualPostId } from './../helpers/globals'
 import { isEventPostType } from './../helpers/event'
 
 
-const PT_EVENT = 'gp_event';
-const PT_VENUE = 'gp_venue';
-const TAX_VENUE_SHADOW = '_gp_venue';
+// const PT_EVENT = 'gp_event';
+// const PT_VENUE = 'gp_venue';
+// const TAX_VENUE_SHADOW = '_gp_venue';
+import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
 
 /**
  * This component shows a list of selectable venues.
@@ -36,14 +37,14 @@ const VenueTermsCombobox = (props=null) => {
 
 	const [ venueTaxonomyIds, updateVenueTaxonomyIds ] = useEntityProp(
 		'postType',
-		'gp_event',
-		'_gp_venue',
+		PT_EVENT,
+		TAX_VENUE_SHADOW,
 		cId
 	);
 
-	const { isResolvingTerms, records: terms } = useEntityRecords(
+	const { isResolvingTerms, records: venueTerms } = useEntityRecords(
 		'taxonomy',
-		'_gp_venue',
+		TAX_VENUE_SHADOW,
 		{
 			context: 'view',
 			per_page: 10,
@@ -58,6 +59,16 @@ const VenueTermsCombobox = (props=null) => {
 	// console.log('venueTaxonomyIds',venueTaxonomyIds);
 	const setOptions = () => {
 
+		/**
+		 * Using useMemo will cause a re-render only when the raw venueTerms really change.
+		 */
+		const venueTermsAsOptions = useMemo( () => {
+			return venueTerms?.map(( term ) => ({
+				label: 'TERM ' + term?.name,
+				value: term?.id,
+			})) || [];
+		}, [ venueTerms ] );
+
 		return isResolvingTerms
 			? [
 					{
@@ -68,11 +79,12 @@ const VenueTermsCombobox = (props=null) => {
 						value: 'loading',
 					},
 			]
-			: terms?.map((term) => ({
+			// : terms?.map((term) => ({
 
-					label: 'TERM ' + term?.name,
-					value: term?.id,
-			})) || [];
+			// 		label: 'TERM ' + term?.name,
+			// 		value: term?.id,
+			// })) || [];
+			: venueTermsAsOptions;
 
 	}
 	const update = useCallback( (value) => { 
@@ -106,15 +118,17 @@ const VenueTermsCombobox = (props=null) => {
 					'gatherpress'
 				)}
 				__next40pxDefaultSize
-				onChange={(value) => {
-					// console.log('onChange',{value, props});
-					update(value);
-				}}
-				onFilterValueChange={(value) => {
-					setSearchDebounced(value);
-				}}
-				options={setOptions()}
-				value={setValue()}
+				// onChange={(value) => {
+				// 	// console.log('onChange',{value, props});
+				// 	update(value);
+				// }}
+				onChange={ update }
+				// onFilterValueChange={(value) => {
+				// 	setSearchDebounced(value);
+				// }}
+				onFilterValueChange={ setSearchDebounced }
+				options={ setOptions() }
+				value={ setValue() }
 			/>	
 		</>
 		

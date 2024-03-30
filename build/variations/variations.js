@@ -45,6 +45,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _helpers_globals__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../helpers/globals */ "./src/helpers/globals.js");
 /* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../helpers/event */ "./src/helpers/event.js");
+/* harmony import */ var _helpers_namespace__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./../helpers/namespace */ "./src/helpers/namespace.js");
 
 /**
  * WordPress dependencies
@@ -60,9 +61,11 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-const PT_EVENT = 'gp_event';
-const PT_VENUE = 'gp_venue';
-const TAX_VENUE_SHADOW = '_gp_venue';
+
+// const PT_EVENT = 'gp_event';
+// const PT_VENUE = 'gp_venue';
+// const TAX_VENUE_SHADOW = '_gp_venue';
+
 
 /**
  * This component shows a list of selectable venues.
@@ -80,7 +83,7 @@ const VenuePostsCombobox = props => {
   const {
     isResolvingPosts,
     records: venuePosts
-  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityRecords)('postType', PT_VENUE, {
+  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityRecords)('postType', _helpers_namespace__WEBPACK_IMPORTED_MODULE_8__.PT_VENUE, {
     context: 'view',
     per_page: 10,
     search
@@ -92,7 +95,7 @@ const VenuePostsCombobox = props => {
     const newAttributes = {
       ...props.attributes,
       selectedPostId: value,
-      selectedPostType: PT_VENUE
+      selectedPostType: _helpers_namespace__WEBPACK_IMPORTED_MODULE_8__.PT_VENUE
     };
     props.setAttributes(newAttributes);
   }, [props]);
@@ -112,13 +115,7 @@ const VenuePostsCombobox = props => {
     return isResolvingPosts ? [{
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Loading&hellip;', 'gatherpress'),
       value: 'loading'
-    }]
-    // : venuePosts?.map((post) => ({
-
-    // 		label: 'POST ' + post?.title.rendered,
-    // 		value: post?.id,
-    // })) || [];
-    : venuePostsAsOptions;
+    }] : venuePostsAsOptions;
   };
   const setValue = () => {
     return props?.attributes?.selectedPostId || 'loading';
@@ -169,6 +166,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
 /* harmony import */ var _helpers_globals__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../helpers/globals */ "./src/helpers/globals.js");
 /* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../helpers/event */ "./src/helpers/event.js");
+/* harmony import */ var _helpers_namespace__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./../helpers/namespace */ "./src/helpers/namespace.js");
 
 /**
  * WordPress dependencies
@@ -184,9 +182,11 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 
-const PT_EVENT = 'gp_event';
-const PT_VENUE = 'gp_venue';
-const TAX_VENUE_SHADOW = '_gp_venue';
+
+// const PT_EVENT = 'gp_event';
+// const PT_VENUE = 'gp_venue';
+// const TAX_VENUE_SHADOW = '_gp_venue';
+
 
 /**
  * This component shows a list of selectable venues.
@@ -202,11 +202,11 @@ const TAX_VENUE_SHADOW = '_gp_venue';
 const VenueTermsCombobox = (props = null) => {
   const [search, setSearch] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)('');
   const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_6__.getCurrentContextualPostId)(props?.context?.postId);
-  const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityProp)('postType', 'gp_event', '_gp_venue', cId);
+  const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityProp)('postType', _helpers_namespace__WEBPACK_IMPORTED_MODULE_8__.PT_EVENT, _helpers_namespace__WEBPACK_IMPORTED_MODULE_8__.TAX_VENUE_SHADOW, cId);
   const {
     isResolvingTerms,
-    records: terms
-  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityRecords)('taxonomy', '_gp_venue', {
+    records: venueTerms
+  } = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_2__.useEntityRecords)('taxonomy', _helpers_namespace__WEBPACK_IMPORTED_MODULE_8__.TAX_VENUE_SHADOW, {
     context: 'view',
     per_page: 10,
     search
@@ -217,13 +217,25 @@ const VenueTermsCombobox = (props = null) => {
 
   // console.log('venueTaxonomyIds',venueTaxonomyIds);
   const setOptions = () => {
+    /**
+     * Using useMemo will cause a re-render only when the raw venueTerms really change.
+     */
+    const venueTermsAsOptions = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useMemo)(() => {
+      return venueTerms?.map(term => ({
+        label: 'TERM ' + term?.name,
+        value: term?.id
+      })) || [];
+    }, [venueTerms]);
     return isResolvingTerms ? [{
       label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Loading&hellip;', 'gatherpress'),
       value: 'loading'
-    }] : terms?.map(term => ({
-      label: 'TERM ' + term?.name,
-      value: term?.id
-    })) || [];
+    }]
+    // : terms?.map((term) => ({
+
+    // 		label: 'TERM ' + term?.name,
+    // 		value: term?.id,
+    // })) || [];
+    : venueTermsAsOptions;
   };
   const update = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useCallback)(value => {
     // console.log('handleVenueTaxChange = useCallback',{value, props});
@@ -243,14 +255,18 @@ const VenueTermsCombobox = (props = null) => {
   };
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.ComboboxControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Choose a venue', 'gatherpress'),
-    __next40pxDefaultSize: true,
-    onChange: value => {
-      // console.log('onChange',{value, props});
-      update(value);
-    },
-    onFilterValueChange: value => {
-      setSearchDebounced(value);
-    },
+    __next40pxDefaultSize: true
+    // onChange={(value) => {
+    // 	// console.log('onChange',{value, props});
+    // 	update(value);
+    // }}
+    ,
+    onChange: update
+    // onFilterValueChange={(value) => {
+    // 	setSearchDebounced(value);
+    // }}
+    ,
+    onFilterValueChange: setSearchDebounced,
     options: setOptions(),
     value: setValue()
   }));
@@ -322,9 +338,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const VenueComboboxProvider = (props = null) => {
   const isEventContext = (0,_helpers_event__WEBPACK_IMPORTED_MODULE_9__.isEventPostType)(props?.context?.postType);
-  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, isEventContext &&
-  // <VenueCombobox {...props} />
-  (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_VenueTermsCombobox__WEBPACK_IMPORTED_MODULE_7__.VenueTermsCombobox, {
+  return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, isEventContext && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_VenueTermsCombobox__WEBPACK_IMPORTED_MODULE_7__.VenueTermsCombobox, {
     ...props
   }), !isEventContext && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_VenuePostsCombobox__WEBPACK_IMPORTED_MODULE_6__.VenuePostsCombobox, {
     ...props
@@ -348,23 +362,18 @@ const venueEdit = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.createHighe
     // Alternatively the block could be part of a `core/query` block, 
     // then props.context provides `postType` and `postId` to use.
     const cId = (0,_helpers_globals__WEBPACK_IMPORTED_MODULE_8__.getCurrentContextualPostId)(props?.context?.postId);
-    const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_5__.useEntityProp)('postType', 'gp_event', '_gp_venue', cId);
+    const [venueTaxonomyIds, updateVenueTaxonomyIds] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_5__.useEntityProp)('postType', _helpers_namespace__WEBPACK_IMPORTED_MODULE_12__.PT_EVENT, _helpers_namespace__WEBPACK_IMPORTED_MODULE_12__.TAX_VENUE_SHADOW, cId);
     const {
       isSelected
     } = props;
     const isDescendentOfQueryLoop = Number.isFinite(props?.context?.queryId);
     const isEventContext = (0,_helpers_event__WEBPACK_IMPORTED_MODULE_9__.isEventPostType)(props?.context?.postType);
+    const isEditableEventContext = !isDescendentOfQueryLoop && venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite(venueTaxonomyIds[0]);
+    console.log('isEditableEventContext', isEditableEventContext);
     let venuePost;
-    if (isEventContext) {
-      venuePost = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromEventId)(cId);
-      if (!isDescendentOfQueryLoop) {
-        if (venueTaxonomyIds && Number.isFinite(venueTaxonomyIds[0])) {
-          venuePost = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromTermId)(venueTaxonomyIds[0]);
-          // console.log('venueTaxonomyIds', venueTaxonomyIds);
-          // console.log('venuePost', venuePost);
-        }
-      }
-    }
+    console.log(venuePost);
+    venuePost = isEditableEventContext ? (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromTermId)(venueTaxonomyIds[0]) : isEventContext ? (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromEventId)(cId) : null;
+    console.log(venuePost);
     let venuePostContext = props?.attributes?.selectedPostId;
     if (venuePost && venuePost.length >= 1 && Number.isFinite(venuePost[0].id)) {
       venuePostContext = venuePost[0].id; // working !
