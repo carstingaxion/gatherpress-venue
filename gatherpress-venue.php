@@ -29,33 +29,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 function bootstrap(): void {
 
 	require_once __DIR__ . '/includes/core/classes/class-venue.php';
-	// require_once __DIR__ . '/includes/query-loop.php';
 	require_once __DIR__ . '/includes/group.php';
 
 	\add_action( 'init', __NAMESPACE__ . '\\register_assets', 1 );
 
 	\add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\\enqueue_assets' );
-
-	// \add_action( 'after_setup_theme', 'twentytwentytwo_support' );
-
-	// \add_filter( 'render_block_core/group', __NAMESPACE__ . '\\debug_group_block', 10, 3 );
-		
-	// add_filter(
-	// 'the_title',
-	// function ( $title, $id = null ) {
-
-	// $post = \get_post( $id );
-	
-	// return sprintf(
-	// '<pre>%s:%s</pre> %s',
-	// $post->post_type,
-	// $post->ID,
-	// $title
-	// );
-	// },
-	// 10,
-	// 2 
-	// );
 }
 bootstrap();
 
