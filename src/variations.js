@@ -38,7 +38,7 @@ import { VenueContext } from './components/VenueContext';
 
 import VenueBlockPluginFill from './slotfill';
 import { venueEdit } from './edit';
-import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './components/namespace';
+import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './helpers/namespace';
 
 
 /*

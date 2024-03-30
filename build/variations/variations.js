@@ -259,29 +259,6 @@ const VenueTermsCombobox = (props = null) => {
 
 /***/ }),
 
-/***/ "./src/components/namespace.js":
-/*!*************************************!*\
-  !*** ./src/components/namespace.js ***!
-  \*************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   GPV_CLASS_NAME: () => (/* binding */ GPV_CLASS_NAME),
-/* harmony export */   PT_EVENT: () => (/* binding */ PT_EVENT),
-/* harmony export */   PT_VENUE: () => (/* binding */ PT_VENUE),
-/* harmony export */   TAX_VENUE_SHADOW: () => (/* binding */ TAX_VENUE_SHADOW),
-/* harmony export */   VARIATION_OF: () => (/* binding */ VARIATION_OF)
-/* harmony export */ });
-const PT_EVENT = 'gp_event';
-const PT_VENUE = 'gp_venue';
-const TAX_VENUE_SHADOW = '_gp_venue';
-const GPV_CLASS_NAME = 'gp-venue-v3'; // maybe better: 'gp-venue-portal-group'
-
-const VARIATION_OF = 'core/group';
-
-/***/ }),
-
 /***/ "./src/edit.js":
 /*!*********************!*\
   !*** ./src/edit.js ***!
@@ -310,7 +287,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _helpers_event__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./helpers/event */ "./src/helpers/event.js");
 /* harmony import */ var _helpers_venue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./helpers/venue */ "./src/helpers/venue.js");
 /* harmony import */ var _components_VenueContext__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/VenueContext */ "./src/components/VenueContext.js");
-/* harmony import */ var _components_namespace__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/namespace */ "./src/components/namespace.js");
+/* harmony import */ var _helpers_namespace__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./helpers/namespace */ "./src/helpers/namespace.js");
 
 /**
  * WordPress dependencies
@@ -355,12 +332,12 @@ const VenueComboboxProvider = (props = null) => {
 };
 const venueEdit = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.createHigherOrderComponent)(BlockEdit => {
   return props => {
-    if (props.name !== _components_namespace__WEBPACK_IMPORTED_MODULE_12__.VARIATION_OF) {
+    if (props.name !== _helpers_namespace__WEBPACK_IMPORTED_MODULE_12__.VARIATION_OF) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockEdit, {
         ...props
       });
     }
-    if (!props?.attributes?.className?.includes(_components_namespace__WEBPACK_IMPORTED_MODULE_12__.GPV_CLASS_NAME)) {
+    if (!props?.attributes?.className?.includes(_helpers_namespace__WEBPACK_IMPORTED_MODULE_12__.GPV_CLASS_NAME)) {
       return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockEdit, {
         ...props
       });
@@ -492,6 +469,29 @@ function getCurrentContextualPostId(postId = null) {
 function getCurrentContextualPostType(postType = null) {
   return postType || (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.select)('core/editor').getCurrentPostType();
 }
+
+/***/ }),
+
+/***/ "./src/helpers/namespace.js":
+/*!**********************************!*\
+  !*** ./src/helpers/namespace.js ***!
+  \**********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   GPV_CLASS_NAME: () => (/* binding */ GPV_CLASS_NAME),
+/* harmony export */   PT_EVENT: () => (/* binding */ PT_EVENT),
+/* harmony export */   PT_VENUE: () => (/* binding */ PT_VENUE),
+/* harmony export */   TAX_VENUE_SHADOW: () => (/* binding */ TAX_VENUE_SHADOW),
+/* harmony export */   VARIATION_OF: () => (/* binding */ VARIATION_OF)
+/* harmony export */ });
+const PT_EVENT = 'gp_event';
+const PT_VENUE = 'gp_venue';
+const TAX_VENUE_SHADOW = '_gp_venue';
+const GPV_CLASS_NAME = 'gp-venue-v3'; // maybe better: 'gp-venue-portal-group'
+
+const VARIATION_OF = 'core/group';
 
 /***/ }),
 
@@ -822,7 +822,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_VenueContext__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/VenueContext */ "./src/components/VenueContext.js");
 /* harmony import */ var _slotfill__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./slotfill */ "./src/slotfill.js");
 /* harmony import */ var _edit__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./edit */ "./src/edit.js");
-/* harmony import */ var _components_namespace__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/namespace */ "./src/components/namespace.js");
+/* harmony import */ var _helpers_namespace__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./helpers/namespace */ "./src/helpers/namespace.js");
 
 /**
  * WordPress dependencies
@@ -865,7 +865,7 @@ __webpack_require__.r(__webpack_exports__);
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-variations/
  */
 const venuePortalGroup = {
-  name: _components_namespace__WEBPACK_IMPORTED_MODULE_11__.GPV_CLASS_NAME,
+  name: _helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.GPV_CLASS_NAME,
   title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Venue Details (v3)', 'gatherpress'),
   description: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Queries information for a venue.', 'gatherpress'),
   category: 'gatherpress',
@@ -873,7 +873,7 @@ const venuePortalGroup = {
   keywords: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('website', 'gatherpress'), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('location', 'gatherpress'), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('city', 'gatherpress')],
   scope: ['inserter', 'block'],
   attributes: {
-    className: _components_namespace__WEBPACK_IMPORTED_MODULE_11__.GPV_CLASS_NAME,
+    className: _helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.GPV_CLASS_NAME,
     // important for isActive callback fn
 
     // is neccessary to make isActive work !!
@@ -887,17 +887,17 @@ const venuePortalGroup = {
   isActive: (blockAttrs, variationAttrs) => {
     // console.warn('blockAttrs',blockAttrs);
     // console.warn('variationAttrs',variationAttrs);
-    return blockAttrs?.className.includes(_components_namespace__WEBPACK_IMPORTED_MODULE_11__.GPV_CLASS_NAME) // check if className contains GROUP_CARD_VARIATION and not equals. incase you add additional css classes it will still work
+    return blockAttrs?.className.includes(_helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.GPV_CLASS_NAME) // check if className contains GROUP_CARD_VARIATION and not equals. incase you add additional css classes it will still work
     ;
   },
   innerBlocks: [['core/post-title'], ['core/paragraph', {
     placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add text or blocks that will display in the context of the selected VENUE.')
   }]]
 };
-(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockVariation)(_components_namespace__WEBPACK_IMPORTED_MODULE_11__.VARIATION_OF, venuePortalGroup);
+(0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockVariation)(_helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.VARIATION_OF, venuePortalGroup);
 (0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__.addFilter)('blocks.registerBlockType', 'gatherpress/extend-group-block', extendGroupBlock);
 function extendGroupBlock(settings, name) {
-  if (name !== _components_namespace__WEBPACK_IMPORTED_MODULE_11__.VARIATION_OF) {
+  if (name !== _helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.VARIATION_OF) {
     return settings;
   }
   // console.warn(name);
