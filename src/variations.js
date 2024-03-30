@@ -21,54 +21,24 @@ import { __ } from '@wordpress/i18n';
  */
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { addFilter } from '@wordpress/hooks';
+import { registerPlugin } from '@wordpress/plugins';
 
 
-import { InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, PanelRow } from '@wordpress/components';
-
-/**
- * Internal dependencies
- */
-import { VenueCombobox } from './components/VenueCombobox';
-import { VenuePostsCombobox } from './components/VenuePostsCombobox';
-import { VenueTermsCombobox } from './components/VenueTermsCombobox';
-
-import { getCurrentContextualPostId } from './helpers/globals';
-
-import { isEventPostType } from './helpers/event'
-import { getVenuePostFromEventId } from './helpers/venue'
-
-
-
-
-
-import { VenueContext } from './components/VenueContext';
 import { useContext } from '@wordpress/element'
 
 
 
-import { useEntityProp } from '@wordpress/core-data';
+/**
+ * Internal dependencies
+ */
+import { getCurrentContextualPostId } from './helpers/globals';
+
+import { VenueContext } from './components/VenueContext';
 
 
-import { getVenuePostFromTermId } from './helpers/venue';
-
-
-
-
-// slot fills
-import { registerPlugin } from '@wordpress/plugins';
 import VenueBlockPluginFill from './slotfill';
-
-
-
-
-const PT_EVENT = 'gp_event';
-const PT_VENUE = 'gp_venue';
-const TAX_VENUE_SHADOW = '_gp_venue';
-
-const GPV_CLASS_NAME   = 'gp-venue-v3'; // maybe better: 'gp-venue-portal-group'
-
-const VARIATION_OF = 'core/group';
+import { venueEdit } from './edit';
+import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './components/namespace';
 
 
 /*
@@ -173,11 +143,38 @@ function extendGroupBlock(settings, name) {
 }
 
 
+const childBlockContextProvider = 	createHigherOrderComponent((BlockEdit) => {
+	return (props) => {
+		const VenueContextId = useContext(VenueContext)
+
+		const useModifiedProps = Number.isFinite( VenueContextId );
+		// const newId = ( useModifiedProps ) ? VenueContextId : props?.context?.postId;
+		// const newType = ( useModifiedProps ) ? 'gp_venue' : props?.context?.postType;
+		const modifiedProps = {
+			...props,
+			context: {
+				...props.context,
+				postId: VenueContextId,
+				postType: 'gp_venue'
+			}
+		}
+// console.log(props.name,modifiedProps.context);
+		return (
+			<>
+				{useModifiedProps && (
+					<BlockEdit {...modifiedProps} />
+				)}
+				{! useModifiedProps && (
+					<BlockEdit {...props} />
+				)}
+			</>
+		);
+	};
+});
+
 
 /**
- * Add the edit component to the block.
- * This is the component that will be rendered in the editor.
- * It will be rendered after the original block edit component.
+ * 
  *
  * @param {function} BlockEdit Original component
  * @returns {function} Wrapped component
@@ -187,163 +184,11 @@ function extendGroupBlock(settings, name) {
 addFilter(
 	"editor.BlockEdit",
 	"gatherpress-venue/post-title-block-variation",
-	createHigherOrderComponent((BlockEdit) => {
-		return (props) => {
-			// if (props.name !== 'core/post-title') {
-			// 	return <BlockEdit {...props} />;
-			// }
-			const x = useContext(VenueContext)
-
-// console.log(props.name, x)
-// console.log(props.name, props?.context);
-
-
-			const useModifiedProps = Number.isFinite( x );
-			const newId = ( Number.isFinite( x ) ) ? x : props?.context?.postId;
-			const newType = ( Number.isFinite( x ) ) ? 'gp_venue' : props?.context?.postType;
-			const modifiedProps = {
-				...props,
-				context: {
-					...props.context,
-					postId: newId,
-					postType: newType
-				}
-			}
-// console.log(props.name,modifiedProps.context);
-			return (
-				<>
-					{useModifiedProps && (
-						<BlockEdit {...modifiedProps} />
-					)}
-					{! useModifiedProps && (
-						<BlockEdit {...props} />
-					)}
-				</>
-			);
-		};
-	}),
+	childBlockContextProvider
 );
 
-const VenueComboboxProvider = (props=null) => {
-	const isEventContext = isEventPostType(props?.context?.postType);
-	return (
-		<>
-			{ isEventContext && (
-				// <VenueCombobox {...props} />
-				<VenueTermsCombobox {...props} />
-				)}
-			{ ! isEventContext && (
-				<VenuePostsCombobox {...props} />
-			)}
-		</>
-	);
-}
-
-const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
-
-	
-	return (props) => {
-		if (props.name !== VARIATION_OF) {
-			return <BlockEdit {...props} />;
-		}
-		if ( !props?.attributes?.className?.includes(GPV_CLASS_NAME) ) {
-			return <BlockEdit {...props} />
-		}
-		
-		// If this 'venue' block is on the root-level of a 'gp_event' post,
-		// the desired post is the currently edited post.
-		// Alternatively the block could be part of a `core/query` block, 
-		// then props.context provides `postType` and `postId` to use.
-		const cId = getCurrentContextualPostId(props?.context?.postId) 
-
-		const [ venueTaxonomyIds, updateVenueTaxonomyIds ] = useEntityProp(
-			'postType',
-			'gp_event',
-			'_gp_venue',
-			cId
-		);
-		
-		const { isSelected } = props;
-		const isDescendentOfQueryLoop = Number.isFinite( props?.context?.queryId );
-		const isEventContext = isEventPostType(props?.context?.postType);
 
 
-		let venuePost;
-		if ( isEventContext ) {
-			venuePost = getVenuePostFromEventId( cId );
-
-			if ( ! isDescendentOfQueryLoop ) {
-
-				if ( venueTaxonomyIds && Number.isFinite( venueTaxonomyIds[0] ) ) {
-					venuePost = getVenuePostFromTermId( venueTaxonomyIds[0] );
-					// console.log('venueTaxonomyIds', venueTaxonomyIds);
-					// console.log('venuePost', venuePost);
-				}
-			}
-
-		}
-
-		let venuePostContext = props?.attributes?.selectedPostId;
-		if (
-			venuePost && 
-			venuePost.length >= 1 && 
-			Number.isFinite( venuePost[0].id )
-		) {
-			venuePostContext = venuePost[0].id; // working !
-		}
-
-		return (
-			<>
-				{/* <EditUpdater {...props} >
-	</EditUpdater> */}
-		
-					{ venuePostContext && (
-						<VenueContext.Provider value={ venuePostContext }>
-							<BlockEdit {...props} />
-						</VenueContext.Provider>
-					)}
-					{ ! venuePostContext && (
-						<p>
-							<em>What to show, when (1) no venues or (2) an online-event is selected?</em><br /> (At least, add a placeholder here to provide help).
-						</p>
-					)}	
-
-				{ ! isDescendentOfQueryLoop && isSelected && (
-					// https://github.com/carstingaxion/gutenberg/blob/964bf6dbc7a2c357a2383e145bbd3cf561cf2ae4/packages/block-library/src/query/edit/inspector-controls/index.js#L29-L30
-					// import { unlock } from '../../../lock-unlock';
-					// const { BlockInfo } = unlock( blockEditorPrivateApis );
-					// <BlockInfo>
-					// 	<PanelBody
-					// 		title={__('Venue settings', 'gatherpress')}
-					// 		initialOpen={true}
-					// 	>
-					// 		<PanelRow>
-					// 			<VenueCombobox {...props} />
-					// 		</PanelRow>
-					// 	</PanelBody>
-					// </BlockInfo>
-
-					<InspectorControls>
-						<PanelBody
-							title={__('Venue settings', 'gatherpress')}
-							initialOpen={true}
-						>
-							<PanelRow>
-								{/* { isEventContext && (
-									<VenueCombobox {...props} />
-								)}
-								{ ! isEventContext && (
-									<VenuePostsCombobox {...props} />
-								)} */}
-								<VenueComboboxProvider {...props} />
-							</PanelRow>
-						</PanelBody>
-					</InspectorControls>
-				) }
-			</>
-		);
-	};
-}, 'venueEdit' );
 
 /**
  * Add the edit component to the block.
@@ -364,4 +209,9 @@ addFilter(
 
 
 
-registerPlugin('venue-block-slot-fill', { render: VenueBlockPluginFill });
+registerPlugin(
+	'venue-block-slot-fill',
+	{
+		render: VenueBlockPluginFill
+	}
+);
