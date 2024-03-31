@@ -119,11 +119,9 @@ function extendGroupBlock(settings, name) {
 			...settings.attributes,
 			selectedPostId: { 
 				type: 'integer',
-				// default: cId,
 			},
 			selectedPostType: { 
 				type: 'string',
-				// default: 'gp_venue',
 			}
 		},
         supports: {
@@ -149,13 +147,13 @@ const childBlockContextProvider = 	createHigherOrderComponent((BlockEdit) => {
 
 		const useModifiedProps = Number.isFinite( VenueContextId );
 		// const newId = ( useModifiedProps ) ? VenueContextId : props?.context?.postId;
-		// const newType = ( useModifiedProps ) ? 'gp_venue' : props?.context?.postType;
+		// const newType = ( useModifiedProps ) ? PT_VENUE : props?.context?.postType;
 		const modifiedProps = {
 			...props,
 			context: {
 				...props.context,
 				postId: VenueContextId,
-				postType: 'gp_venue'
+				postType: PT_VENUE
 			}
 		}
 // console.log(props.name,modifiedProps.context);
@@ -203,7 +201,8 @@ addFilter(
 addFilter(
 	"editor.BlockEdit",
 	"gatherpress-venue/group-block-variation",
-	venueEdit
+	venueEdit,
+	1
 );
 
 

@@ -26,15 +26,18 @@ export function getVenueSlugFromTermSlug( termSlug ) {
  */
 export function getVenuePostFromTermId( termId ) {
 
-	if(null === termId) {
-		return [];
-	}
-	// console.log('termId', termId);
 
+	
 	const { venuePost } = useSelect((select) =>{
+		
+		console.log('termId', termId);
+		if(null === termId) {
+			return [];
+		}
     	const venueTerm = select('core').getEntityRecord('taxonomy', '_gp_venue', termId);
 		const venueSlug = venueTerm?.slug.replace(/^_/, '');
 		return {
+			// venuePost: ( ! Number.isFinite( termId ) ) ? [] : select('core').getEntityRecords('postType', 'gp_venue', {
 			venuePost: select('core').getEntityRecords('postType', 'gp_venue', {
 				per_page: 1,
 				slug: venueSlug,
@@ -57,11 +60,16 @@ export function getVenuePostFromTermId( termId ) {
 export function getVenuePostFromEventId( eventId ) {
 
 	const { termId } = useSelect((select) =>{
-		const eventPost = select('core').getEntityRecord('postType', 'gp_event', eventId);
-		return {
-			termId: ( eventPost._gp_venue.length >= 1 ) ? eventPost?._gp_venue?.[0] : null,
-		};
-	}, [ eventId ] );
+	// const { venuePost } = useSelect((select) =>{
+	// console.log(eventId);
+	const eventPost = select('core').getEntityRecord('postType', 'gp_event', eventId);
+	return {
+		termId: ( eventPost && eventPost._gp_venue.length >= 1 ) ? eventPost?._gp_venue?.[0] : null,
+		// venuePost: ( eventPost && eventPost._gp_venue.length >= 1 ) ? getVenuePostFromTermId( eventPost?._gp_venue?.[0] ) : [],
+	};
+}, [ eventId ] );
 
+// console.log('termId',termId);
 	return getVenuePostFromTermId( termId );
+	// return venuePost;
 }

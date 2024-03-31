@@ -79,27 +79,35 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 		
 		const { isSelected } = props;
 		const isDescendentOfQueryLoop = Number.isFinite( props?.context?.queryId );
-		const isEventContext = isEventPostType(props?.context?.postType);
 
-        const isEditableEventContext = ! isDescendentOfQueryLoop && venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] );
+        const isEventContext = isEventPostType(props?.context?.postType);
+        const venuePostFromEventId = getVenuePostFromEventId( cId );
 
-        console.log('isEditableEventContext', isEditableEventContext  );
-let venuePost;
-console.log(venuePost);
-        venuePost = isEditableEventContext
-            ? getVenuePostFromTermId( venueTaxonomyIds[0] )
-            : ( isEventContext ? getVenuePostFromEventId( cId ) : null );
-console.log(venuePost);
+        // const isEditableEventContext = ! isDescendentOfQueryLoop && venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] );
+        const isEditableEventContext = ( ! isDescendentOfQueryLoop && venueTaxonomyIds instanceof Array );
+        const taxIds = venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] ) ? venueTaxonomyIds[0] : null;
+        const venuePostFromTermId = getVenuePostFromTermId( taxIds );
 
 
-		let venuePostContext = props?.attributes?.selectedPostId;
-		if (
+        // console.log('isEditableEventContext', isEditableEventContext  );
+// let venuePost;
+// console.log(venuePost);
+        let venuePost = isEditableEventContext
+            ? venuePostFromTermId
+            : ( isEventContext ? venuePostFromEventId : null );
+
+
+// console.log(venuePost);
+
+
+		let venuePostContext = 
+		(
 			venuePost && 
 			venuePost.length >= 1 && 
 			Number.isFinite( venuePost[0].id )
-		) {
-			venuePostContext = venuePost[0].id; // working !
-		}
+		)
+        ? venuePost[0].id // working !
+        : props?.attributes?.selectedPostId;
 
 		return (
 			<>

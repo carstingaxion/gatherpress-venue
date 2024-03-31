@@ -368,16 +368,22 @@ const venueEdit = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_2__.createHighe
     } = props;
     const isDescendentOfQueryLoop = Number.isFinite(props?.context?.queryId);
     const isEventContext = (0,_helpers_event__WEBPACK_IMPORTED_MODULE_9__.isEventPostType)(props?.context?.postType);
-    const isEditableEventContext = !isDescendentOfQueryLoop && venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite(venueTaxonomyIds[0]);
-    console.log('isEditableEventContext', isEditableEventContext);
-    let venuePost;
-    console.log(venuePost);
-    venuePost = isEditableEventContext ? (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromTermId)(venueTaxonomyIds[0]) : isEventContext ? (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromEventId)(cId) : null;
-    console.log(venuePost);
-    let venuePostContext = props?.attributes?.selectedPostId;
-    if (venuePost && venuePost.length >= 1 && Number.isFinite(venuePost[0].id)) {
-      venuePostContext = venuePost[0].id; // working !
-    }
+    const venuePostFromEventId = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromEventId)(cId);
+
+    // const isEditableEventContext = ! isDescendentOfQueryLoop && venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] );
+    const isEditableEventContext = !isDescendentOfQueryLoop && venueTaxonomyIds instanceof Array;
+    const taxIds = venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite(venueTaxonomyIds[0]) ? venueTaxonomyIds[0] : null;
+    const venuePostFromTermId = (0,_helpers_venue__WEBPACK_IMPORTED_MODULE_10__.getVenuePostFromTermId)(taxIds);
+
+    // console.log('isEditableEventContext', isEditableEventContext  );
+    // let venuePost;
+    // console.log(venuePost);
+    let venuePost = isEditableEventContext ? venuePostFromTermId : isEventContext ? venuePostFromEventId : null;
+
+    // console.log(venuePost);
+
+    let venuePostContext = venuePost && venuePost.length >= 1 && Number.isFinite(venuePost[0].id) ? venuePost[0].id // working !
+    : props?.attributes?.selectedPostId;
     return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, venuePostContext && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_VenueContext__WEBPACK_IMPORTED_MODULE_11__.VenueContext.Provider, {
       value: venuePostContext
     }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(BlockEdit, {
@@ -544,17 +550,17 @@ export function getVenueSlugFromTermSlug( termSlug ) {
  * @return {Object} WP_Post 
  */
 function getVenuePostFromTermId(termId) {
-  if (null === termId) {
-    return [];
-  }
-  // console.log('termId', termId);
-
   const {
     venuePost
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useSelect)(select => {
+    console.log('termId', termId);
+    if (null === termId) {
+      return [];
+    }
     const venueTerm = select('core').getEntityRecord('taxonomy', '_gp_venue', termId);
     const venueSlug = venueTerm?.slug.replace(/^_/, '');
     return {
+      // venuePost: ( ! Number.isFinite( termId ) ) ? [] : select('core').getEntityRecords('postType', 'gp_venue', {
       venuePost: select('core').getEntityRecords('postType', 'gp_venue', {
         per_page: 1,
         slug: venueSlug
@@ -578,12 +584,18 @@ function getVenuePostFromEventId(eventId) {
   const {
     termId
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_0__.useSelect)(select => {
+    // const { venuePost } = useSelect((select) =>{
+    // console.log(eventId);
     const eventPost = select('core').getEntityRecord('postType', 'gp_event', eventId);
     return {
-      termId: eventPost._gp_venue.length >= 1 ? eventPost?._gp_venue?.[0] : null
+      termId: eventPost && eventPost._gp_venue.length >= 1 ? eventPost?._gp_venue?.[0] : null
+      // venuePost: ( eventPost && eventPost._gp_venue.length >= 1 ) ? getVenuePostFromTermId( eventPost?._gp_venue?.[0] ) : [],
     };
   }, [eventId]);
+
+  // console.log('termId',termId);
   return getVenuePostFromTermId(termId);
+  // return venuePost;
 }
 
 /***/ }),
@@ -922,11 +934,9 @@ function extendGroupBlock(settings, name) {
       ...settings.attributes,
       selectedPostId: {
         type: 'integer'
-        // default: cId,
       },
       selectedPostType: {
         type: 'string'
-        // default: 'gp_venue',
       }
     },
     supports: {
@@ -948,13 +958,13 @@ const childBlockContextProvider = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE
     const VenueContextId = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_6__.useContext)(_components_VenueContext__WEBPACK_IMPORTED_MODULE_8__.VenueContext);
     const useModifiedProps = Number.isFinite(VenueContextId);
     // const newId = ( useModifiedProps ) ? VenueContextId : props?.context?.postId;
-    // const newType = ( useModifiedProps ) ? 'gp_venue' : props?.context?.postType;
+    // const newType = ( useModifiedProps ) ? PT_VENUE : props?.context?.postType;
     const modifiedProps = {
       ...props,
       context: {
         ...props.context,
         postId: VenueContextId,
-        postType: 'gp_venue'
+        postType: _helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.PT_VENUE
       }
     };
     // console.log(props.name,modifiedProps.context);
@@ -986,7 +996,7 @@ const childBlockContextProvider = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE
  *
  * @see https://developer.wordpress.org/block-editor/developers/filters/block-filters/#editor-blockedit
  */
-(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__.addFilter)("editor.BlockEdit", "gatherpress-venue/group-block-variation", _edit__WEBPACK_IMPORTED_MODULE_10__.venueEdit);
+(0,_wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__.addFilter)("editor.BlockEdit", "gatherpress-venue/group-block-variation", _edit__WEBPACK_IMPORTED_MODULE_10__.venueEdit, 1);
 (0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_5__.registerPlugin)('venue-block-slot-fill', {
   render: _slotfill__WEBPACK_IMPORTED_MODULE_9__["default"]
 });
