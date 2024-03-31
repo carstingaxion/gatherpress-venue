@@ -76,14 +76,12 @@ const venuePortalGroup = {
 		);
 	},
 
+	// The 'venue-details' block-pattern will receive all relevant blocks hooked in automatically.
 	innerBlocks: [
-		['core/post-title'],
 		[
-			'core/paragraph',
+			'core/pattern',
 			{
-				placeholder: __(
-					'Add text or blocks that will display in the context of the selected VENUE.'
-				),
+				slug: 'gatherpress/venue-details',
 			},
 		],
 	],

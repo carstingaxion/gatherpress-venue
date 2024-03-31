@@ -911,8 +911,9 @@ const venuePortalGroup = {
     return blockAttrs?.className.includes(_helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.GPV_CLASS_NAME) // check if className contains GROUP_CARD_VARIATION and not equals. incase you add additional css classes it will still work
     ;
   },
-  innerBlocks: [['core/post-title'], ['core/paragraph', {
-    placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add text or blocks that will display in the context of the selected VENUE.')
+  // The 'venue-details' block-pattern will receive all relevant blocks hooked in automatically.
+  innerBlocks: [['core/pattern', {
+    slug: 'gatherpress/venue-details'
   }]]
 };
 (0,_wordpress_blocks__WEBPACK_IMPORTED_MODULE_1__.registerBlockVariation)(_helpers_namespace__WEBPACK_IMPORTED_MODULE_11__.VARIATION_OF, venuePortalGroup);
