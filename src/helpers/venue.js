@@ -8,9 +8,9 @@ import { useSelect } from '@wordpress/data';
  * 
  * @since 0.30.0
  * 
- * @param {String} termSlug Slug of a '_gp_venue' taxonomy term.
+ * @param {String} termSlug Slug of a '_gatherpress_venue' taxonomy term.
  * 
- * @returns Slug of the corresponding 'gp_venue' post.
+ * @returns Slug of the corresponding 'gatherpress_venue' post.
 
 export function getVenueSlugFromTermSlug( termSlug ) {
 	
@@ -18,7 +18,7 @@ export function getVenueSlugFromTermSlug( termSlug ) {
 } */
 
 /**
- * Retrieve a 'gp_venue' post from a given '_gp_venue' term ID.
+ * Retrieve a 'gatherpress_venue' post from a given '_gatherpress_venue' term ID.
  *
  * @since 0.30.0
  *
@@ -34,11 +34,11 @@ export function getVenuePostFromTermId( termId ) {
 		if(null === termId) {
 			return [];
 		}
-    	const venueTerm = select('core').getEntityRecord('taxonomy', '_gp_venue', termId);
+    	const venueTerm = select('core').getEntityRecord('taxonomy', '_gatherpress_venue', termId);
 		const venueSlug = venueTerm?.slug.replace(/^_/, '');
 		return {
-			// venuePost: ( ! Number.isFinite( termId ) ) ? [] : select('core').getEntityRecords('postType', 'gp_venue', {
-			venuePost: select('core').getEntityRecords('postType', 'gp_venue', {
+			// venuePost: ( ! Number.isFinite( termId ) ) ? [] : select('core').getEntityRecords('postType', 'gatherpress_venue', {
+			venuePost: select('core').getEntityRecords('postType', 'gatherpress_venue', {
 				per_page: 1,
 				slug: venueSlug,
 			}),
@@ -51,7 +51,7 @@ export function getVenuePostFromTermId( termId ) {
 }
 
 /**
- * Retrieve a 'gp_venue' post from a given 'gp_event' post ID.
+ * Retrieve a 'gatherpress_venue' post from a given 'gatherpress_event' post ID.
  *
  * @since 0.30.0
  *
@@ -62,10 +62,10 @@ export function getVenuePostFromEventId( eventId ) {
 	const { termId } = useSelect((select) =>{
 	// const { venuePost } = useSelect((select) =>{
 	// console.log(eventId);
-	const eventPost = select('core').getEntityRecord('postType', 'gp_event', eventId);
+	const eventPost = select('core').getEntityRecord('postType', 'gatherpress_event', eventId);
 	return {
-		termId: ( eventPost && eventPost._gp_venue.length >= 1 ) ? eventPost?._gp_venue?.[0] : null,
-		// venuePost: ( eventPost && eventPost._gp_venue.length >= 1 ) ? getVenuePostFromTermId( eventPost?._gp_venue?.[0] ) : [],
+		termId: ( eventPost && eventPost._gatherpress_venue.length >= 1 ) ? eventPost?._gatherpress_venue?.[0] : null,
+		// venuePost: ( eventPost && eventPost._gatherpress_venue.length >= 1 ) ? getVenuePostFromTermId( eventPost?._gatherpress_venue?.[0] ) : [],
 	};
 }, [ eventId ] );
 

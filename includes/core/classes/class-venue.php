@@ -25,7 +25,7 @@ use WP_Term;
 
 
 function get_venue_post_id_from_event_post_id( int $post_id ) : ?int {
-	$venue_terms = \get_the_terms( $post_id, '_gp_venue' );
+	$venue_terms = \get_the_terms( $post_id, '_gatherpress_venue' );
 	if ( ! \is_array( $venue_terms ) || empty( $venue_terms ) ) {
 		return null;
 	}
@@ -47,7 +47,7 @@ function get_venue_post_id_from_event_post_id( int $post_id ) : ?int {
  * @return null|int The ID of the Venue post object if found; otherwise, null.
  */
 function get_venue_post_id_from_term_id( int $term_id ): ?int {
-	$term = \get_term( $term_id, '_gp_venue');
+	$term = \get_term( $term_id, '_gatherpress_venue');
 	if ( ! $term instanceof \WP_Term ) {
 		return null;
 	}
@@ -58,7 +58,7 @@ function get_venue_post_id_from_term_id( int $term_id ): ?int {
 
 
 
-function get_post_id_by_slug( $slug, $post_type = 'gp_venue' ) {
+function get_post_id_by_slug( $slug, $post_type = 'gatherpress_venue' ) {
 	$query = new \WP_Query(
 		array(
 			'name'          => $slug,

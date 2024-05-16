@@ -64,7 +64,7 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 			return <BlockEdit {...props} />
 		}
 		
-		// If this 'venue' block is on the root-level of a 'gp_event' post,
+		// If this 'venue' block is on the root-level of a 'gatherpress_event' post,
 		// the desired post is the currently edited post.
 		// Alternatively the block could be part of a `core/query` block, 
 		// then props.context provides `postType` and `postId` to use.

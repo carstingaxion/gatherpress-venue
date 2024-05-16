@@ -21,7 +21,7 @@ use WP_Post;
  */
 \add_filter(
 	// 'register_' . Venue::TAXONOMY . '_taxonomy_args',
-	'register_' . '_gp_venue' . '_taxonomy_args',
+	'register_' . '_gatherpress_venue' . '_taxonomy_args',
 	function ( $args ) {
 
 		$args['labels'] = array(
@@ -72,14 +72,14 @@ function render_group_block( $block_content, $block, $instance ) {
 	//
 	// Or alternatively, if this another post type,
 	// look for the existence of a manually selected ID inside the blocks' attributes.
-	if ( 'gp_event' !== \get_post_type( $current_post ) && ( ! isset( $block['attrs']['selectedPostId'] ) ) ) {
+	if ( 'gatherpress_event' !== \get_post_type( $current_post ) && ( ! isset( $block['attrs']['selectedPostId'] ) ) ) {
 		return $block_content;
 	}
 
 	require_once __DIR__ . '/core/classes/class-venue.php';
 	
 	// Variant A: The block is somehow within an event.
-	if ( 'gp_event' === \get_post_type( $current_post ) ) {
+	if ( 'gatherpress_event' === \get_post_type( $current_post ) ) {
 		$venue_post_id = Venue\get_venue_post_id_from_event_post_id( $current_post->ID );
 	
 	// Variant B: The block is NOT within an event, but has a venue selected to create a context of.
@@ -88,7 +88,7 @@ function render_group_block( $block_content, $block, $instance ) {
 	}
 	
 	$venue_post    = \get_post( $venue_post_id );
-	if ( ! $venue_post instanceof WP_Post || 'gp_venue' !== $venue_post->post_type ) {
+	if ( ! $venue_post instanceof WP_Post || 'gatherpress_venue' !== $venue_post->post_type ) {
 		return $block_content;
 	}
 

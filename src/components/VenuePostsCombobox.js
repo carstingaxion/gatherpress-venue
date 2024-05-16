@@ -14,15 +14,15 @@ import { getCurrentContextualPostId } from './../helpers/globals'
 import { isEventPostType } from './../helpers/event'
 
 
-// const PT_EVENT = 'gp_event';
-// const PT_VENUE = 'gp_venue';
-// const TAX_VENUE_SHADOW = '_gp_venue';
+// const PT_EVENT = 'gatherpress_event';
+// const PT_VENUE = 'gatherpress_venue';
+// const TAX_VENUE_SHADOW = '_gatherpress_venue';
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
 
 /**
  * This component shows a list of selectable venues.
  * 
- * If shown within a 'gp_event' post context it will save the selected venue as '_gp_venue' taxonomy.
+ * If shown within a 'gatherpress_event' post context it will save the selected venue as '_gatherpress_venue' taxonomy.
  * 
  * Used in all other post contexts it will not save anything to the currently edited post, 
  * but instead just change the attributes of the related block to show the selcted venue.
@@ -44,8 +44,8 @@ const VenuePostsCombobox = (props) => {
 	);
 	const update = useCallback( (value) => { 
 
-		// Setup the 'gp_venue' post to provide context for,
-		// after a new 'gp_venue' post was selected.
+		// Setup the 'gatherpress_venue' post to provide context for,
+		// after a new 'gatherpress_venue' post was selected.
 
 		const newAttributes = {
 			...props.attributes,
