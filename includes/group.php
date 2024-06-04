@@ -82,24 +82,24 @@ function render_group_block( $block_content, $block, $instance ) {
 	if ( 'gatherpress_event' === \get_post_type( $current_post ) ) {
 		$venue_post_id = Venue\get_venue_post_id_from_event_post_id( $current_post->ID );
 	
-	// Variant B: The block is NOT within an event, but has a venue selected to create a context of.
+		// Variant B: The block is NOT within an event, but has a venue selected to create a context of.
 	} elseif ( \is_int( $block['attrs']['selectedPostId'] ) ) {
 		$venue_post_id = $block['attrs']['selectedPostId'];
 	}
 	
-	$venue_post    = \get_post( $venue_post_id );
+	$venue_post = \get_post( $venue_post_id );
 	if ( ! $venue_post instanceof WP_Post || 'gatherpress_venue' !== $venue_post->post_type ) {
 		return $block_content;
 	}
 
 	// \setup_postdata( $venue_post ); 
-global $post;
-$post = $venue_post;
-// "The `$post` argument is intentionally omitted" on the core/post-title block.
-// (source: render_block_core_post_title())
-// 
-// That's reason for overwriting globals over here.
-// See: https://github.com/WordPress/gutenberg/pull/37622#issuecomment-1000932816.
+	global $post;
+	$post = $venue_post;
+	// "The `$post` argument is intentionally omitted" on the core/post-title block.
+	// (source: render_block_core_post_title())
+	// 
+	// That's reason for overwriting globals over here.
+	// See: https://github.com/WordPress/gutenberg/pull/37622#issuecomment-1000932816.
 
 
 
@@ -131,7 +131,7 @@ $post = $venue_post;
 		// $block_content = '<pre>' . \var_export(
 		// 	[
 		// 		$block['attrs'],
-		// 		// $instance->context,
+		// 		$instance->context,
 		// 		// $venue_post,
 		// 	],
 		// 	true 
@@ -143,7 +143,7 @@ $post = $venue_post;
 	 * Since we use two custom loops, it's safest to always restore.
 	*/
 	// wp_reset_postdata();
-$post = $current_post;
+	$post = $current_post;
 
 	return $block_content;
 }

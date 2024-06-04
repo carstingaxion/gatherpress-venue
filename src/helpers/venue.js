@@ -30,7 +30,7 @@ export function getVenuePostFromTermId( termId ) {
 	
 	const { venuePost } = useSelect((select) =>{
 		
-		console.log('termId', termId);
+		// console.log('termId', termId);
 		if(null === termId) {
 			return [];
 		}
