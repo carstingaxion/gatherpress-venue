@@ -93,7 +93,7 @@ registerBlockVariation(VARIATION_OF, venuePortalGroup);
 
 addFilter(
     'blocks.registerBlockType',
-    'gatherpress/extend-group-block',
+    'gatherpress-venue/extend-group-block',
     extendGroupBlock
 );
 
@@ -108,7 +108,7 @@ function extendGroupBlock(settings, name) {
 	settings.usesContext.indexOf('postId') === -1 && settings.usesContext.push('postId');
 	settings.usesContext.indexOf('postType') === -1 && settings.usesContext.push('postType');
 	
-	const cId = getCurrentContextualPostId(null);
+	// const cId = getCurrentContextualPostId(null);
 
 
 	const newSettings = {
@@ -179,7 +179,7 @@ const childBlockContextProvider = 	createHigherOrderComponent((BlockEdit) => {
  */
 addFilter(
 	"editor.BlockEdit",
-	"gatherpress-venue/post-title-block-variation",
+	"gatherpress-venue/child-block-context-provider",
 	childBlockContextProvider
 );
 
