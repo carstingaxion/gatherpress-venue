@@ -69,14 +69,14 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 		// Alternatively the block could be part of a `core/query` block, 
 		// then props.context provides `postType` and `postId` to use.
 		const cId = getCurrentContextualPostId(props?.context?.postId) 
-
+		
 		const [ venueTaxonomyIds, updateVenueTaxonomyIds ] = useEntityProp(
 			'postType',
 			PT_EVENT,
 			TAX_VENUE_SHADOW,
 			cId
 		);
-		
+// console.log(props);
 		const { isSelected } = props;
 		const isDescendentOfQueryLoop = Number.isFinite( props?.context?.queryId );
 
@@ -89,7 +89,7 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
         const venuePostFromTermId = getVenuePostFromTermId( taxIds );
 
 
-        // console.log('isEditableEventContext', isEditableEventContext  );
+// console.log('isEditableEventContext', isEditableEventContext  );
 // let venuePost;
 // console.log(venuePost);
         let venuePost = isEditableEventContext
@@ -97,7 +97,6 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
             : ( isEventContext ? venuePostFromEventId : null );
 
 
-// console.log(venuePost);
 
 
 		let venuePostContext = 
@@ -108,12 +107,25 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 		)
         ? venuePost[0].id // working !
         : props?.attributes?.selectedPostId;
+// venuePostContext = 23;
+// console.log(venuePostContext);
+// console.log(props);
+// // return <BlockEdit {...props} />;
 
+// 		const testProps = {
+// 			...props,
+// 			context: {
+// 				postId: 27,
+// 				postType: 'gatherpress_venue'
+// 			}
+// 		}
 		return (
 			<>
 				{ venuePostContext && (
 					<VenueContext.Provider value={ venuePostContext }>
+					{/* <VenueContext.Provider value={ 23 }> */}
 						<BlockEdit {...props} />
+						{/* <BlockEdit {...testProps} /> */}
 					</VenueContext.Provider>
 				)}
 				{ ! venuePostContext && (
@@ -143,12 +155,6 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 							initialOpen={true}
 						>
 							<PanelRow>
-								{/* { isEventContext && (
-									<VenueCombobox {...props} />
-								)}
-								{ ! isEventContext && (
-									<VenuePostsCombobox {...props} />
-								)} */}
 								<VenueComboboxProvider {...props} />
 							</PanelRow>
 						</PanelBody>
