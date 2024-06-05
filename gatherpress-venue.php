@@ -3,8 +3,8 @@
  * Plugin Name:       Gatherpress venue block
  * Description:       An experiment to replace the `gatherpress/venue` block with a block-variation.
  * Version:           0.1.0-alpha
- * Requires at least: 6.5-RC2
- * Requires PHP:      7.0
+ * Requires at least: 6.5.3
+ * Requires PHP:      8.1
  * Author:            The WordPress Contributors
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -174,7 +174,7 @@ function debug_group_block( $block_content, $parsed_block, $block_instance ) {
 	}
 
 
-	if ( ! isset( $parsed_block['attrs']['className'] ) || false === \strpos( $parsed_block['attrs']['className'], 'gp-venue-v2' ) ) {
+	if ( ! isset( $parsed_block['attrs']['className'] ) || false === \strpos( $parsed_block['attrs']['className'], 'gp-venue-v3' ) ) {
 		return $block_content;
 	}
 
