@@ -50,7 +50,7 @@ bootstrap();
 	function ( $args ) {
 
 		$args['template'] = array(
-			array( 'core/pattern', array( 'slug' => 'gatherpress/venue-details' ) ),
+			array( 'core/pattern', array( 'slug' => 'gatherpress/venue-template' ) ),
 		);
 
 		return $args;
