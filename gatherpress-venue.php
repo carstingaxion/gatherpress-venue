@@ -39,6 +39,25 @@ bootstrap();
 
 
 /**
+ * Overwrite the default template for new created venues
+ * with block-patterns, that can blocks can hook into.
+ * 
+ * @see https://developer.wordpress.org/reference/hooks/register_post_type_post_type_args/
+ * @see https://developer.wordpress.org/reference/functions/register_post_type/#parameters
+ */
+\add_filter(
+	'register_' . 'gatherpress_venue' . '_post_type_args',
+	function ( $args ) {
+
+		$args['template'] = array(
+			array( 'core/pattern', array( 'slug' => 'gatherpress/venue-details' ) ),
+		);
+
+		return $args;
+	}, 20
+);
+
+/**
  * Get backend-only editor assets.
  *
  * @return string[]
