@@ -39,7 +39,7 @@ import { VenueContext } from './components/VenueContext';
 import VenueBlockPluginFill from './slotfill';
 import { venueEdit } from './edit';
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './helpers/namespace';
-
+import GPQLIcon from './components/icon';
 
 /*
  * New `core/group` block variation.
@@ -51,7 +51,8 @@ const venuePortalGroup = {
 	title: __('Venue Details (v3)', 'gatherpress'),
 	description: __( 'Queries information for a venue.', 'gatherpress' ),
 	category: 'gatherpress',
-	icon: 'nametag',
+	// icon: 'nametag',
+	icon: GPQLIcon( 'location' ),
 	keywords: [
 		__('website', 'gatherpress'),
 		__('location', 'gatherpress'),

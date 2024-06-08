@@ -20,6 +20,7 @@
 		"readme.txt"
 	],
 	"devDependencies": {
+		"@wordpress/icons": "*",
 		"@wordpress/scripts": "^27.4.0"
 	}
 }
