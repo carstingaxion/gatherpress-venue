@@ -89,7 +89,8 @@ function render_group_block( $block_content, $block, $instance ) {
 	
 	$venue_post = \get_post( $venue_post_id );
 	if ( ! $venue_post instanceof WP_Post || 'gatherpress_venue' !== $venue_post->post_type ) {
-		return $block_content;
+		// This might be an online-only event.
+		return null; 
 	}
 
 	// \setup_postdata( $venue_post ); 
