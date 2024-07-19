@@ -14,9 +14,6 @@ import { getCurrentContextualPostId } from './../helpers/globals'
 import { isEventPostType } from './../helpers/event'
 
 
-// const PT_EVENT = 'gatherpress_event';
-// const PT_VENUE = 'gatherpress_venue';
-// const TAX_VENUE_SHADOW = '_gatherpress_venue';
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
 
 /**
@@ -33,6 +30,7 @@ import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } fr
 const VenuePostsCombobox = (props) => {
 	const [search, setSearch] = useState('');
 
+	// @TODO: Unify queryParams for VenueTermsCombobox and VenuePostsCombobox
 	const { isResolvingPosts, records: venuePosts } = useEntityRecords(
 		'postType',
 		PT_VENUE,
@@ -40,13 +38,16 @@ const VenuePostsCombobox = (props) => {
 			context: 'view',
 			per_page: 10,
 			search,
+			// include: search ? null : props?.attributes?.selectedPostId,
+
+			// search: search ? search : props?.attributes?.selectedPostId,
+			// search_columns: ['ID', 'post_title'], // ERROR 'rest_not_in_enum': search_columns[0] ist nicht eins von post_title, post_content und post_excerpt.
 		}
 	);
 	const update = useCallback( (value) => { 
 
 		// Setup the 'gatherpress_venue' post to provide context for,
 		// after a new 'gatherpress_venue' post was selected.
-
 		const newAttributes = {
 			...props.attributes,
 			selectedPostId: value,
@@ -66,7 +67,8 @@ const VenuePostsCombobox = (props) => {
 		 */
 		const venuePostsAsOptions = useMemo( () => {
 			return venuePosts?.map(( post ) => ({
-				label: 'POST ' + post?.title.rendered,
+				// label: 'POST ' + post?.title.rendered,
+				label: post?.title.rendered,
 				value: post?.id,
 			})) || [];
 		}, [ venuePosts ] );
@@ -97,14 +99,7 @@ const VenuePostsCombobox = (props) => {
 					'gatherpress'
 				)}
 				__next40pxDefaultSize
-				// onChange={(value) => {
-				// 	// console.log('onChange',{value, props});
-				// 	update(value);
-				// }}
 				onChange={ update }
-				// onFilterValueChange={(value) => {
-				// 	setSearchDebounced(value);
-				// }}
 				onFilterValueChange={ setSearchDebounced }
 				options={setOptions()}
 				value={ setValue() }

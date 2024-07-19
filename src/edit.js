@@ -35,6 +35,9 @@ import { isEventPostType } from './helpers/event';
 import { getVenuePostFromEventId, getVenuePostFromTermId } from './helpers/venue';
 
 import { VenueContext } from './components/VenueContext';
+import VenueNavigator from './components/VenueNavigator';
+
+
 
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './helpers/namespace';
 
@@ -43,19 +46,19 @@ const VenueComboboxProvider = (props=null) => {
 	const isEventContext = isEventPostType(props?.context?.postType);
 	return (
 		<>
-			{ isEventContext && (
-				<VenueTermsCombobox {...props} />
+			<VenueNavigator {...props} >
+				{ isEventContext && (
+					<VenueTermsCombobox {...props} />
+					)}
+				{ ! isEventContext && (
+					<VenuePostsCombobox {...props} />
 				)}
-			{ ! isEventContext && (
-				<VenuePostsCombobox {...props} />
-			)}
+			</VenueNavigator>
 		</>
 	);
 }
 
 const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
-
-	
 	return (props) => {
 		if (props.name !== VARIATION_OF) {
 			return <BlockEdit {...props} />;
@@ -76,56 +79,35 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 			TAX_VENUE_SHADOW,
 			cId
 		);
-// console.log(props);
+
 		const { isSelected } = props;
 		const isDescendentOfQueryLoop = Number.isFinite( props?.context?.queryId );
 
-        const isEventContext = isEventPostType(props?.context?.postType);
-        const venuePostFromEventId = getVenuePostFromEventId( cId );
+		const isEventContext = isEventPostType(props?.context?.postType);
+		const venuePostFromEventId = getVenuePostFromEventId( cId );
 
-        // const isEditableEventContext = ! isDescendentOfQueryLoop && venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] );
-        const isEditableEventContext = ( ! isDescendentOfQueryLoop && venueTaxonomyIds instanceof Array );
-        const taxIds = venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] ) ? venueTaxonomyIds[0] : null;
-        const venuePostFromTermId = getVenuePostFromTermId( taxIds );
+		const isEditableEventContext = ( ! isDescendentOfQueryLoop && venueTaxonomyIds instanceof Array );
+		const taxIds = venueTaxonomyIds && venueTaxonomyIds.length >= 1 && Number.isFinite( venueTaxonomyIds[0] ) ? venueTaxonomyIds[0] : null;
+		const venuePostFromTermId = getVenuePostFromTermId( taxIds );
 
-
-// console.log('isEditableEventContext', isEditableEventContext  );
-// let venuePost;
-// console.log(venuePost);
-        let venuePost = isEditableEventContext
-            ? venuePostFromTermId
-            : ( isEventContext ? venuePostFromEventId : null );
-
-
-
+		let venuePost = isEditableEventContext
+			? venuePostFromTermId
+			: ( isEventContext ? venuePostFromEventId : null );
 
 		let venuePostContext = 
-		(
-			venuePost && 
-			venuePost.length >= 1 && 
-			Number.isFinite( venuePost[0].id )
-		)
-        ? venuePost[0].id // working !
-        : props?.attributes?.selectedPostId;
-// venuePostContext = 23;
-// console.log(venuePostContext);
-// console.log(props);
-// // return <BlockEdit {...props} />;
+			(
+				venuePost && 
+				venuePost.length >= 1 && 
+				Number.isFinite( venuePost[0].id )
+			)
+			? venuePost[0].id // working !
+			: props?.attributes?.selectedPostId;
 
-// 		const testProps = {
-// 			...props,
-// 			context: {
-// 				postId: 27,
-// 				postType: 'gatherpress_venue'
-// 			}
-// 		}
 		return (
 			<>
 				{ venuePostContext && (
 					<VenueContext.Provider value={ venuePostContext }>
-					{/* <VenueContext.Provider value={ 23 }> */}
 						<BlockEdit {...props} />
-						{/* <BlockEdit {...testProps} /> */}
 					</VenueContext.Provider>
 				)}
 				{ ! venuePostContext && (
@@ -135,20 +117,6 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 				)}	
 
 				{ ! isDescendentOfQueryLoop && isSelected && (
-					// https://github.com/carstingaxion/gutenberg/blob/964bf6dbc7a2c357a2383e145bbd3cf561cf2ae4/packages/block-library/src/query/edit/inspector-controls/index.js#L29-L30
-					// import { unlock } from '../../../lock-unlock';
-					// const { BlockInfo } = unlock( blockEditorPrivateApis );
-					// <BlockInfo>
-					// 	<PanelBody
-					// 		title={__('Venue settings', 'gatherpress')}
-					// 		initialOpen={true}
-					// 	>
-					// 		<PanelRow>
-					// 			<VenueCombobox {...props} />
-					// 		</PanelRow>
-					// 	</PanelBody>
-					// </BlockInfo>
-
 					<InspectorControls>
 						<PanelBody
 							title={__('Venue settings', 'gatherpress')}
@@ -165,4 +133,4 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 	};
 }, 'venueEdit' );
 
-export { venueEdit };
+export { venueEdit, VenueComboboxProvider };

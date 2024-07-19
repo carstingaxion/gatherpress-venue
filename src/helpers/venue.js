@@ -34,7 +34,7 @@ export function getVenuePostFromTermId( termId ) {
 		if(null === termId) {
 			return [];
 		}
-    	const venueTerm = select('core').getEntityRecord('taxonomy', '_gatherpress_venue', termId);
+		const venueTerm = select('core').getEntityRecord('taxonomy', '_gatherpress_venue', termId);
 		const venueSlug = venueTerm?.slug.replace(/^_/, '');
 		return {
 			// venuePost: ( ! Number.isFinite( termId ) ) ? [] : select('core').getEntityRecords('postType', 'gatherpress_venue', {
@@ -50,6 +50,41 @@ export function getVenuePostFromTermId( termId ) {
 	return venuePost;
 }
 
+
+/**
+ * Retrieve a '_gatherpress_venue' term from a given 'gatherpress_venue' post ID.
+ *
+ * @since 0.30.0
+ *
+ * @return {Object} WP_Post 
+ */
+export function getVenueTermFromPostId( postId=null ) {
+
+/* */
+	
+	const { venueTerm } = useSelect((select) =>{
+		
+		console.log('postId', postId);
+		if(null === postId) {
+			return [];
+		}
+		const venuePost = select('core').getEntityRecord( 'postType', 'gatherpress_venue', postId );
+		const venueSlug = '_' + venuePost.slug;
+		return {
+			// venueTerm: ( ! Number.isFinite( postId ) ) ? [] : select('core').getEntityRecords('postType', 'gatherpress_venue', {
+			venueTerm: select('core').getEntityRecords('taxonomy', '_gatherpress_venue', {
+				per_page: 1,
+				slug: venueSlug,
+			}),
+		}
+	}, [ postId ] );
+
+	
+	// console.log('venueTerm', venueTerm);
+	// return 8 // 8=NewYork
+	return venueTerm;
+}
+
 /**
  * Retrieve a 'gatherpress_venue' post from a given 'gatherpress_event' post ID.
  *
@@ -60,16 +95,17 @@ export function getVenuePostFromTermId( termId ) {
 export function getVenuePostFromEventId( eventId ) {
 
 	const { termId } = useSelect((select) =>{
-	// const { venuePost } = useSelect((select) =>{
-	// console.log(eventId);
-	const eventPost = select('core').getEntityRecord('postType', 'gatherpress_event', eventId);
-	return {
-		termId: ( eventPost && eventPost._gatherpress_venue.length >= 1 ) ? eventPost?._gatherpress_venue?.[0] : null,
-		// venuePost: ( eventPost && eventPost._gatherpress_venue.length >= 1 ) ? getVenuePostFromTermId( eventPost?._gatherpress_venue?.[0] ) : [],
-	};
-}, [ eventId ] );
+		// const { venuePost } = useSelect((select) =>{
+		// console.log(eventId);
+		const eventPost = select('core').getEntityRecord('postType', 'gatherpress_event', eventId);
+		return {
+			termId: ( eventPost && eventPost._gatherpress_venue.length >= 1 ) ? eventPost?._gatherpress_venue?.[0] : null,
+			// venuePost: ( eventPost && eventPost._gatherpress_venue.length >= 1 ) ? getVenuePostFromTermId( eventPost?._gatherpress_venue?.[0] ) : [],
+		};
+	}, [ eventId ] );
 
 // console.log('termId',termId);
 	return getVenuePostFromTermId( termId );
 	// return venuePost;
 }
+

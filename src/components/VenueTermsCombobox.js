@@ -3,7 +3,11 @@
  */
 import { ComboboxControl } from '@wordpress/components';
 import { useEntityRecords, useEntityProp } from '@wordpress/core-data';
-import { useState, useCallback, useMemo } from '@wordpress/element';
+
+import { select, useSelect, useDispatch } from '@wordpress/data';
+
+// import { useState, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo, useEffect } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
@@ -13,10 +17,6 @@ import { __ } from '@wordpress/i18n';
 import { getCurrentContextualPostId } from './../helpers/globals'
 import { isEventPostType } from './../helpers/event'
 
-
-// const PT_EVENT = 'gatherpress_event';
-// const PT_VENUE = 'gatherpress_venue';
-// const TAX_VENUE_SHADOW = '_gatherpress_venue';
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
 
 /**
@@ -42,6 +42,7 @@ const VenueTermsCombobox = (props=null) => {
 		cId
 	);
 
+	// @TODO: Unify queryParams for VenueTermsCombobox and VenuePostsCombobox
 	const { isResolvingTerms, records: venueTerms } = useEntityRecords(
 		'taxonomy',
 		TAX_VENUE_SHADOW,
@@ -49,6 +50,8 @@ const VenueTermsCombobox = (props=null) => {
 			context: 'view',
 			per_page: 10,
 			search,
+			orderby: 'id',
+			order: 'desc'
 		}
 	);
 
@@ -56,7 +59,6 @@ const VenueTermsCombobox = (props=null) => {
 		setSearch(value);
 	}, 300);
 
-	// console.log('venueTaxonomyIds',venueTaxonomyIds);
 	const setOptions = () => {
 
 		/**
@@ -64,7 +66,8 @@ const VenueTermsCombobox = (props=null) => {
 		 */
 		const venueTermsAsOptions = useMemo( () => {
 			return venueTerms?.map(( term ) => ({
-				label: 'TERM ' + term?.name,
+				// label: 'TERM ' + term?.name,
+				label: term?.name,
 				value: term?.id,
 			})) || [];
 		}, [ venueTerms ] );
@@ -79,23 +82,10 @@ const VenueTermsCombobox = (props=null) => {
 						value: 'loading',
 					},
 			]
-			// : terms?.map((term) => ({
-
-			// 		label: 'TERM ' + term?.name,
-			// 		value: term?.id,
-			// })) || [];
 			: venueTermsAsOptions;
 
 	}
 	const update = useCallback( (value) => { 
-
-
-		// console.log('handleVenueTaxChange = useCallback',{value, props});
-	
-
-		// console.log(value);
-		// console.log(Number.isFinite( value ));
-
 		// Could be no real termID if "Choose a venue" was selected
 		// const save = ( Number.isFinite( value ) ) ? [ value ] : []; // !! works well when changing terms, BUT: when all venues are removed by "x", value is null. but this empty array leads to <react> errors-.
 		// const save = ( Number.isFinite( value ) ) ? [ value ] : [0]; // having "0" works against the react error, but leads to showing wrong venues, where there shouldnt be any.
@@ -110,6 +100,44 @@ const VenueTermsCombobox = (props=null) => {
 		return venueTaxonomyIds?.[0] || 'loading'
 	}
 
+	const { invalidateResolution } = useDispatch('core/data');
+
+	/**
+	 * Pass invalidateResolution the same parameters as isResolving
+	 * and it will tell the datastore that it needs to provide a new request.
+	 * 
+	 * @see https://ryanwelcher.com/2021/08/18/requesting-data-in-gutenberg-with-getentityrecords/
+	 */
+	const invalidateResolver = () => {
+		invalidateResolution('core', 'getEntityRecords', [
+			'taxonomy',
+			TAX_VENUE_SHADOW,
+			{
+				context: 'view',
+				per_page: 10,
+				search,
+				orderby: 'id',
+				order: 'desc'
+			}
+		]);
+	};
+
+	// Perfom actions on state change
+	useEffect(() => {
+		// venueTerm value change, do someting
+		if (venueTaxonomyIds) {
+			// console.log(venueTaxonomyIds);
+			// console.log(venueTerms);
+			invalidateResolver();
+			// console.log(venueTerms);
+		} else {
+			// console.log('empty');
+		}
+		// Dependency array, every time updateVenueTaxonomyIds() is called (somewhere),
+		//  the useEffect callback will be called.
+	// }, [venueTaxonomyIds]);
+	}, [updateVenueTaxonomyIds]);
+
 	return (
 		<>
 			<ComboboxControl
@@ -118,14 +146,7 @@ const VenueTermsCombobox = (props=null) => {
 					'gatherpress'
 				)}
 				__next40pxDefaultSize
-				// onChange={(value) => {
-				// 	// console.log('onChange',{value, props});
-				// 	update(value);
-				// }}
 				onChange={ update }
-				// onFilterValueChange={(value) => {
-				// 	setSearchDebounced(value);
-				// }}
 				onFilterValueChange={ setSearchDebounced }
 				options={ setOptions() }
 				value={ setValue() }
