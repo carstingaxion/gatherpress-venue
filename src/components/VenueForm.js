@@ -116,7 +116,6 @@ function CreateVenueForm( props=null ) {
 	const updateVenueDetailsBlockAttributes = ( post_id, props=null ) => {
 	
 		if ( typeof props.setAttributes !== 'undefined') {
-			// @TODO: This will only work for the VenuePostsCombobox !!
 			const newAttributes = {
 				...props.attributes,
 				selectedPostId: post_id,
@@ -125,7 +124,7 @@ function CreateVenueForm( props=null ) {
 			props.setAttributes(newAttributes);
 		}
 	}
-
+/* 
 	const { saveEntityRecord } = useDispatch( coreDataStore );
 	const handleVenueSave = async () => {
 
@@ -151,71 +150,111 @@ function CreateVenueForm( props=null ) {
 			updateVenueDetailsBlockAttributes( savedRecord.id, props );
 		}
 	};
-
+ */
 
 
 	/**
-	 * A functional component for the block editor that creates a new venue post,
-	 * finds the venue term with the same slug as the newly created venue post,
-	 * and updates the currently edited event post with the ID of the queried venue term.
+	 * Creates a new venue post with the provided title and address.
+	 *
+	 * @param {string} title - The title of the new venue.
+	 * @param {string} address - The address of the new venue.
+	 * @returns {Object} The newly created venue post.
 	 */
-    // Get the editPost function from the core/editor store to update the post.
-    // const { editPost } = useDispatch('core/editor');
-    const updateVenueTermOnEventPost = () => {
-
-		// Create a new venue post with the provided title & address.
-        apiFetch({
-            path: '/wp/v2/gatherpress_venues',
-            method: 'POST',
-            data: {
-                title,
-                status: 'publish', // 'draft' is the default
-				meta: {
-					// @TODO: Should become 'geo_address', when #560 is resolved!
-					gatherpress_venue_information: JSON.stringify({
-						fullAddress: address
-					})
+	const createNewVenuePost = async (title, address) => {
+		try {
+			const newPost = await apiFetch({
+				path: `/wp/v2/${PT_VENUE}s`, // !! Watch out & beware of the 's' at the end. // @TODO Make this nicer.
+				method: 'POST',
+				data: {
+					title,
+					status: 'publish', // 'draft' is the default
+					meta: {
+						// @TODO: Should become 'geo_address', when #560 is resolved!
+						gatherpress_venue_information: JSON.stringify({
+							fullAddress: address
+						})
+					}
 				}
-            }
-        })
-        .then((newPost) => {
-			console.log( newPost.title.rendered + ' Venue saved successfully.' );
-            // Fetch the term based on the slug of the newly created venue post.
-			console.log(newPost);
-            const newPostSlug = '_' + newPost.slug;
-            return apiFetch({ path: `/wp/v2/_gatherpress_venue?slug=${newPostSlug}` });
-        })
-        .then((terms) => {
-            if (terms.length > 0) {
-                const term = terms[0];
-                // Update the currently edited event with the venue taxonomy term.
-                // editPost( {
+			});
+
+			console.log(`${newPost.title.rendered} Venue saved successfully.`, newPost );
+			return newPost;
+		} catch (error) {
+			console.error('Error creating post:', error);
+			throw error;
+		}
+	};
+
+	/**
+	 * Fetches the term based on the slug of the newly created venue post and updates the currently edited event with the venue taxonomy term.
+	 *
+	 * @param {string} newPostSlug - The slug of the newly created venue post.
+	 * @param {function} updateVenueTaxonomyIds - Callback to update the venue taxonomy of the currently edited event with the given terms.
+	 */
+	// Get the editPost function from the core/editor store to update the post.
+	// const { editPost } = useDispatch('core/editor');
+	const fetchTermAndUpdateEvent = async (newPostSlug, updateVenueTaxonomyIds) => {
+		try {
+			const terms = await apiFetch({ path: `/wp/v2/${TAX_VENUE_SHADOW}?slug=${newPostSlug}` });
+
+			if (terms.length > 0) {
+				const term = terms[0];
+				// Update the currently edited event with the venue taxonomy term.
+				// editPost( {
 				// 	taxonomies: {
 				// 		_gatherpress_venue: [ term.id ]
 				// 	}
-				// } );
+				// } )
 				updateVenueTaxonomyIds( [ term.id ] );
-				console.log('Updates the event with the venue taxonomy term.', term );
-            }
-        })
-        .catch((error) => {
-            console.error('Error creating post or fetching term:', error);
-        });
-    };
+				console.log('Updates the event with the venue taxonomy term.', term);
+			}
+		} catch (error) {
+			console.error('Error fetching term:', error);
+		}
+	};
 
-	// const saveBogus = ( newVenue ) => {
+	/**
+	 * A functional component for the block editor that handles the complete process of
+	 * creating a new venue post and updating the event post with the venue term.
+	 */
+	const updateVenueTermOnEventPost = async () => {
+		try {
+			const newPost = await createNewVenuePost(title, address);
+			const newPostSlug = '_' + newPost.slug;
+			await fetchTermAndUpdateEvent(newPostSlug, updateVenueTaxonomyIds);
+		} catch (error) {
+			console.error('Error in the updateVenueTermOnEventPost process:', error);
+		}
+	};
+
+	/**
+	 * 
+	 */
+	const updateVenuePostOnBlockAttributes = async () => {
+		try {
+			const newPost = await createNewVenuePost(title, address);
+			updateVenueDetailsBlockAttributes( newPost.id, props );
+		} catch (error) {
+			console.error('Error in the updateVenuePostOnBlockAttributes process:', error);
+		}
+	};
+
+	/**
+	 * Function to handle the save action for the venue form.
+	 * This function is called when the save button is clicked.
+	 */
 	const saveBogus = async () => {
 
 		if ( isEventPostType() ) {
 
-			// This should only work for the VenueTermsCombobox !!
-			updateVenueTermOnEventPost();
+			// This should only run for the VenueTermsCombobox.
+			await updateVenueTermOnEventPost();
 
 		} else {
-			await handleVenueSave();
-			// updateVenueDetailsBlockAttributes( newVenue.id, props );
+			// This should only run for the VenuePostsCombobox.
+			await updateVenuePostOnBlockAttributes();
 		}
-		// for both
+		// In both cases, go home.
 		navigateBack();
 	}	
 
@@ -226,14 +265,7 @@ function CreateVenueForm( props=null ) {
 			address={ address ?? '' }
 			onChangeAddress={ setAddress }
 			hasEdits={ !!title }
-			// onSave={ handleSave }
 			onSave={ saveBogus }
-/* 			onSave={ () => {
-				// This should only work for the VenueTermsCombobox !!
-				updateVenueTermOnEventPost();
-				// for both
-				navigateBack();
-			} } */
 			lastError={ lastError }
 			onCancel={ navigateBack }
 			isSaving={ isSaving }
