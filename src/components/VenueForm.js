@@ -124,37 +124,13 @@ function CreateVenueForm( props=null ) {
 			props.setAttributes(newAttributes);
 		}
 	}
-/* 
-	const { saveEntityRecord } = useDispatch( coreDataStore );
-	const handleVenueSave = async () => {
-
-
-		const savedRecord = await saveEntityRecord(
-			'postType',
-			PT_VENUE,
-			{
-				title,
-				status: 'publish',
-				meta: {
-					// @TODO: Should become 'geo_address', when #560 is resolved!
-					gatherpress_venue_information: JSON.stringify({
-						fullAddress: address
-					})
-				}
-			}
-		);
-		if ( savedRecord ) {
-
-			console.log( savedRecord.title.rendered + ' Venue saved successfully.' );
-
-			updateVenueDetailsBlockAttributes( savedRecord.id, props );
-		}
-	};
- */
 
 
 	/**
 	 * Creates a new venue post with the provided title and address.
+	 *
+	 * Have been & could also run,
+	 * based on "const { saveEntityRecord } = useDispatch( coreDataStore )".
 	 *
 	 * @param {string} title - The title of the new venue.
 	 * @param {string} address - The address of the new venue.
@@ -177,7 +153,7 @@ function CreateVenueForm( props=null ) {
 				}
 			});
 
-			console.log(`${newPost.title.rendered} Venue saved successfully.`, newPost );
+			// console.log(`${newPost.title.rendered} Venue saved successfully.`, newPost );
 			return newPost;
 		} catch (error) {
 			console.error('Error creating post:', error);
@@ -206,7 +182,7 @@ function CreateVenueForm( props=null ) {
 				// 	}
 				// } )
 				updateVenueTaxonomyIds( [ term.id ] );
-				console.log('Updates the event with the venue taxonomy term.', term);
+				// console.log('Updates the event with the venue taxonomy term.', term);
 			}
 		} catch (error) {
 			console.error('Error fetching term:', error);

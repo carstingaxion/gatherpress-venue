@@ -102,15 +102,10 @@ function extendGroupBlock(settings, name) {
     if (name !== VARIATION_OF) {
         return settings;
     }
-	// console.warn(name);
-	// console.warn(settings);
 
 	settings.usesContext.indexOf('queryId') === -1 && settings.usesContext.push('queryId');
 	settings.usesContext.indexOf('postId') === -1 && settings.usesContext.push('postId');
 	settings.usesContext.indexOf('postType') === -1 && settings.usesContext.push('postType');
-	
-	// const cId = getCurrentContextualPostId(null);
-
 
 	const newSettings = {
         ...settings,
@@ -128,14 +123,7 @@ function extendGroupBlock(settings, name) {
 			className: false, // Removes "Additional CSS classes" panel for blocks that support it
 			// customClassName: false // **Updated** For blocks that don't have className
         },
-		// providesContext: {
-		// 	...settings.providesContext,
-		// 	'postId': 'selectedPostId', // this allow to overwrite context with a static value
-		// 	'postType': 'selectedPostType'
-		// }
-	
     }
-	// console.log(newSettings);
 	return newSettings;
 }
 
@@ -145,8 +133,6 @@ const childBlockContextProvider = 	createHigherOrderComponent((BlockEdit) => {
 		const VenueContextId = useContext(VenueContext)
 
 		const useModifiedProps = Number.isFinite( VenueContextId );
-		// const newId = ( useModifiedProps ) ? VenueContextId : props?.context?.postId;
-		// const newType = ( useModifiedProps ) ? PT_VENUE : props?.context?.postType;
 		const modifiedProps = {
 			...props,
 			context: {
@@ -155,7 +141,6 @@ const childBlockContextProvider = 	createHigherOrderComponent((BlockEdit) => {
 				postType: PT_VENUE
 			}
 		}
-// console.log(props.name,modifiedProps.context);
 		return (
 			<>
 				{useModifiedProps && (
