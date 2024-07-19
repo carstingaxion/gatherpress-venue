@@ -3,10 +3,11 @@
  */
 import { ComboboxControl } from '@wordpress/components';
 import { useEntityRecords, useEntityProp } from '@wordpress/core-data';
-import { useState, useCallback, useMemo } from '@wordpress/element';
+import { useEffect, useState, useCallback, useMemo } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
+import { select, useSelect, useDispatch } from '@wordpress/data';
 /**
  * Internal dependencies.
  */
@@ -90,6 +91,40 @@ const VenuePostsCombobox = (props) => {
 	const setValue = () => {
 		return props?.attributes?.selectedPostId || 'loading';
 	}
+
+	const { invalidateResolution } = useDispatch('core/data');
+
+	/**
+	 * Pass invalidateResolution the same parameters as isResolving
+	 * and it will tell the datastore that it needs to provide a new request.
+	 * 
+	 * @see https://ryanwelcher.com/2021/08/18/requesting-data-in-gutenberg-with-getentityrecords/
+	 */
+	const invalidateResolver = () => {
+		invalidateResolution('core', 'getEntityRecords', [
+			'postType',
+			PT_VENUE,
+			{
+				context: 'view',
+				per_page: 10,
+				search,
+				orderby: 'id',
+				order: 'desc'
+			}
+		]);
+	};
+
+	// Perfom actions on state change
+	useEffect(() => {
+		// selectedPostId value change, do someting
+		if (props.attributes.selectedPostId) {
+			invalidateResolver();
+		} else {
+			// console.log('empty');
+		}
+		// Dependency array, every time selectedPostIdis changed (somehow),
+		//  the useEffect callback will be called.
+	}, [props.attributes.selectedPostId]);
 
 	return (
 		<>
