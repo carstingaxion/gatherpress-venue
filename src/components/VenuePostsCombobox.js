@@ -39,6 +39,8 @@ const VenuePostsCombobox = (props) => {
 			context: 'view',
 			per_page: 10,
 			search,
+			orderby: 'id',
+			order: 'desc'
 			// include: search ? null : props?.attributes?.selectedPostId,
 
 			// search: search ? search : props?.attributes?.selectedPostId,
