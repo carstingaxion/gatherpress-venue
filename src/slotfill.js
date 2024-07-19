@@ -14,15 +14,14 @@ import { Fill } from '@wordpress/components';
  */
 import { VenueTermsCombobox } from './components/VenueTermsCombobox';
 
+import { VenueComboboxProvider } from './edit';
 
 export default function VenueBlockPluginFill() {
 	return (
 		<>
-			<Fill name="VenuePluginDocumentSettings">
-				<p>THE "VenueBlockPluginFill" in VenuePluginDocumentSettings</p>
-			</Fill>
-			<Fill name="VenuePluginDocumentSettings">
-				<VenueTermsCombobox />
+			<Fill name="EventPluginDocumentSettings">
+				{/* <VenueTermsCombobox /> */}
+				<VenueComboboxProvider />
 			</Fill>
 		</>
 	);
