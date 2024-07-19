@@ -38,9 +38,9 @@ import { VenueContext } from './components/VenueContext';
 import VenueNavigator from './components/VenueNavigator';
 
 
+// import VenuePanelRow from './components/VenuePanelRow';
 
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './helpers/namespace';
-
 
 const VenueComboboxProvider = (props=null) => {
 	const isEventContext = isEventPostType(props?.context?.postType);
@@ -125,6 +125,7 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 							<PanelRow>
 								<VenueComboboxProvider {...props} />
 							</PanelRow>
+							{/* <VenuePanelRow {...props} /> */}
 						</PanelBody>
 					</InspectorControls>
 				) }
