@@ -26,6 +26,7 @@ import { registerPlugin } from '@wordpress/plugins';
 
 import { useContext } from '@wordpress/element'
 
+import { mapMarker } from '@wordpress/icons';
 
 
 /**
@@ -51,8 +52,8 @@ const venuePortalGroup = {
 	title: __('Venue Details (v3)', 'gatherpress'),
 	description: __( 'Queries information for a venue.', 'gatherpress' ),
 	category: 'gatherpress',
-	// icon: 'nametag',
-	icon: GPQLIcon( 'location' ),
+	// icon: GPQLIcon( 'location' ),
+	icon: GPQLIcon( mapMarker ),
 	keywords: [
 		__('website', 'gatherpress'),
 		__('location', 'gatherpress'),
