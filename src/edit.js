@@ -26,8 +26,7 @@ import { useEntityProp } from '@wordpress/core-data';
 /**
  * Internal dependencies
  */
-import { VenuePostsCombobox } from './components/VenuePostsCombobox';
-import { VenueTermsCombobox } from './components/VenueTermsCombobox';
+import { VenueComboboxProvider } from './components/VenueComboboxProvider';
 
 import { getCurrentContextualPostId } from './helpers/globals';
 
@@ -35,28 +34,11 @@ import { isEventPostType } from './helpers/event';
 import { getVenuePostFromEventId, getVenuePostFromTermId } from './helpers/venue';
 
 import { VenueContext } from './components/VenueContext';
-import VenueNavigator from './components/VenueNavigator';
 
 
 // import VenuePanelRow from './components/VenuePanelRow';
 
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './helpers/namespace';
-
-const VenueComboboxProvider = (props=null) => {
-	const isEventContext = isEventPostType(props?.context?.postType);
-	return (
-		<>
-			<VenueNavigator {...props} >
-				{ isEventContext && (
-					<VenueTermsCombobox {...props} />
-					)}
-				{ ! isEventContext && (
-					<VenuePostsCombobox {...props} />
-				)}
-			</VenueNavigator>
-		</>
-	);
-}
 
 const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 	return (props) => {
@@ -134,4 +116,4 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 	};
 }, 'venueEdit' );
 
-export { venueEdit, VenueComboboxProvider };
+export { venueEdit };
