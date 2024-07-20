@@ -10,7 +10,8 @@ import { __experimentalInspectorPopoverHeader as InspectorPopoverHeader } from '
  * Internal dependencies
  */
 // import VenuePanelRowForm from './index';
-import { VenueComboboxProvider } from '../edit';
+// import { VenueComboboxProvider } from '../edit';
+import VenueNavigator from './VenueNavigator';
 
 
 
@@ -107,7 +108,8 @@ export function VenuePanelRow(props=null) {
                             onClose={ onClose }
                         />
                         {/* <VenueComboboxProvider onClose={ onClose } /> */}
-                        <VenueComboboxProvider {...props} />
+                        {/* <VenueComboboxProvider {...props} /> */}
+                        <VenueNavigator {...props} />
                     </div>
                 ) }
             />
