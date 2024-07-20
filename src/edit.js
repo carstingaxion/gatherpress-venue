@@ -26,8 +26,6 @@ import { useEntityProp } from '@wordpress/core-data';
 /**
  * Internal dependencies
  */
-import { VenueComboboxProvider } from './components/VenueComboboxProvider';
-
 import { getCurrentContextualPostId } from './helpers/globals';
 
 import { isEventPostType } from './helpers/event';
@@ -35,6 +33,7 @@ import { getVenuePostFromEventId, getVenuePostFromTermId } from './helpers/venue
 
 import { VenueContext } from './components/VenueContext';
 
+import VenueNavigator from './components/VenueNavigator';
 
 // import VenuePanelRow from './components/VenuePanelRow';
 
@@ -105,7 +104,7 @@ const venueEdit = createHigherOrderComponent( ( BlockEdit ) => {
 							initialOpen={true}
 						>
 							<PanelRow>
-								<VenueComboboxProvider {...props} />
+								<VenueNavigator {...props} />
 							</PanelRow>
 							{/* <VenuePanelRow {...props} /> */}
 						</PanelBody>

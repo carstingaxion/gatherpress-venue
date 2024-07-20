@@ -30,8 +30,7 @@ import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } fr
  * @param {Object} props Properties of the 'venue'-core/group-block-variation.
  * @returns Combobox component with our venues selectable.
  */
-const VenueTermsCombobox = (props=null) => {
-	const [search, setSearch] = useState('');
+const VenueTermsCombobox = ({ search, setSearch, ...props }) => {
 
 	const cId = getCurrentContextualPostId(props?.context?.postId) 
 

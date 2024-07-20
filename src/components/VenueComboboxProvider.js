@@ -2,25 +2,22 @@
 /**
  * Internal dependencies
  */
-import VenueNavigator from './VenueNavigator';
 
 import { VenueTermsCombobox } from './VenueTermsCombobox';
 import { VenuePostsCombobox } from './VenuePostsCombobox';
 
 import { isEventPostType } from '../helpers/event';
 
-const VenueComboboxProvider = (props=null) => {
+const VenueComboboxProvider = ({ search, setSearch, ...props }) => {
 	const isEventContext = isEventPostType(props?.context?.postType);
 	return (
 		<>
-			<VenueNavigator {...props} >
-				{ isEventContext && (
-					<VenueTermsCombobox {...props} />
-					)}
-				{ ! isEventContext && (
-					<VenuePostsCombobox {...props} />
-				)}
-			</VenueNavigator>
+            { isEventContext && (
+                <VenueTermsCombobox {...props} search={ search } setSearch={ setSearch } />
+                )}
+            { ! isEventContext && (
+                <VenuePostsCombobox {...props} search={ search } setSearch={ setSearch } />
+            )}
 		</>
 	);
 }

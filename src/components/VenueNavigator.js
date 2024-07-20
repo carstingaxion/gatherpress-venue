@@ -11,10 +11,13 @@ import {
 
 import { store as coreDataStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
+import { useState } from '@wordpress/element';
 
 import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
 
 import CreateVenueForm from './VenueForm';
+import { VenueComboboxProvider } from './VenueComboboxProvider';
+
 
 
 export default function VenueNavigator (props=null) {
@@ -62,6 +65,9 @@ export default function VenueNavigator (props=null) {
 		[]
 	);
 
+
+	const [search, setSearch] = useState('');
+
 	return (
 		<NavigatorProvider
 			initialPath="/"
@@ -75,7 +81,7 @@ export default function VenueNavigator (props=null) {
 					padding: '.1em'
 				}}
 			>
-				{ props.children }
+				<VenueComboboxProvider {...props} search={ search } setSearch={ setSearch } />
 				{ userCanEdit && (
 					<NavigatorButton
 						path="/new"
@@ -91,7 +97,7 @@ export default function VenueNavigator (props=null) {
 					padding: '.1em'
 				}}
 			>
-				<CreateVenueForm {...props} />
+				<CreateVenueForm {...props} search={ search } />
 			</NavigatorScreen>
 		</NavigatorProvider>
 	);

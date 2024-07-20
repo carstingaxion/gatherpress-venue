@@ -81,9 +81,9 @@ function VenueForm( { title, onChangeTitle, address, onChangeAddress, hasEdits, 
 
 
 
-function CreateVenueForm( props=null ) {
+function CreateVenueForm( { search, ...props } ) {
 
-	const [title, setTitle] = useState();
+	const [title, setTitle] = useState( search );
 	const [address, setAddress] = useState();
 
 	const { lastError, isSaving } = useSelect(

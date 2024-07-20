@@ -28,8 +28,7 @@ import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } fr
  * @param {Object} props Properties of the 'venue'-core/group-block-variation.
  * @returns Combobox component with our venues selectable.
  */
-const VenuePostsCombobox = (props) => {
-	const [search, setSearch] = useState('');
+const VenuePostsCombobox = ({ search, setSearch, ...props }) => {
 
 	// @TODO: Unify queryParams for VenueTermsCombobox and VenuePostsCombobox
 	const { isResolvingPosts, records: venuePosts } = useEntityRecords(
