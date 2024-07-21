@@ -11,10 +11,11 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies.
  */
-import { getCurrentContextualPostId } from './../helpers/globals'
-import { isEventPostType } from './../helpers/event'
+import { getCurrentContextualPostId } from './../helpers/globals';
 
-import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
+import { useVenuesQuery } from './hook';
+
+import { PT_EVENT, TAX_VENUE_SHADOW } from './../helpers/namespace';
 
 /**
  * This component shows a list of selectable venues.
@@ -38,49 +39,13 @@ const VenueTermsCombobox = ({ search, setSearch, ...props }) => {
 		cId
 	);
 
-	// @TODO: Unify queryParams for VenueTermsCombobox and VenuePostsCombobox
-	const { isResolvingTerms, records: venueTerms } = useEntityRecords(
-		'taxonomy',
-		TAX_VENUE_SHADOW,
-		{
-			context: 'view',
-			per_page: 10,
-			search,
-			orderby: 'id',
-			order: 'desc'
-		}
-	);
+	const venueId = venueTaxonomyIds?.[0];
+	const { venueOptions } = useVenuesQuery( search, venueId );
 
 	const setSearchDebounced = useDebounce((value) => {
 		setSearch(value);
 	}, 300);
 
-	const setOptions = () => {
-
-		/**
-		 * Using useMemo will cause a re-render only when the raw venueTerms really change.
-		 */
-		const venueTermsAsOptions = useMemo( () => {
-			return venueTerms?.map(( term ) => ({
-				// label: 'TERM ' + term?.name,
-				label: term?.name,
-				value: term?.id,
-			})) || [];
-		}, [ venueTerms ] );
-
-		return isResolvingTerms
-			? [
-					{
-						label: __(
-							'Loading&hellip;',
-							'gatherpress'
-						),
-						value: 'loading',
-					},
-			]
-			: venueTermsAsOptions;
-
-	}
 	const update = useCallback( (value) => { 
 		// Could be no real termID if "Choose a venue" was selected
 		// const save = ( Number.isFinite( value ) ) ? [ value ] : []; // !! works well when changing terms, BUT: when all venues are removed by "x", value is null. but this empty array leads to <react> errors-.
@@ -96,44 +61,6 @@ const VenueTermsCombobox = ({ search, setSearch, ...props }) => {
 		return venueTaxonomyIds?.[0] || 'loading'
 	}
 
-	const { invalidateResolution } = useDispatch('core/data');
-
-	/**
-	 * Pass invalidateResolution the same parameters as isResolving
-	 * and it will tell the datastore that it needs to provide a new request.
-	 * 
-	 * @see https://ryanwelcher.com/2021/08/18/requesting-data-in-gutenberg-with-getentityrecords/
-	 */
-	const invalidateResolver = () => {
-		invalidateResolution('core', 'getEntityRecords', [
-			'taxonomy',
-			TAX_VENUE_SHADOW,
-			{
-				context: 'view',
-				per_page: 10,
-				search,
-				orderby: 'id',
-				order: 'desc'
-			}
-		]);
-	};
-
-	// Perfom actions on state change
-	useEffect(() => {
-		// venueTerm value change, do someting
-		if (venueTaxonomyIds) {
-			// console.log(venueTaxonomyIds);
-			// console.log(venueTerms);
-			invalidateResolver();
-			// console.log(venueTerms);
-		} else {
-			// console.log('empty');
-		}
-		// Dependency array, every time updateVenueTaxonomyIds() is called (somewhere),
-		//  the useEffect callback will be called.
-	// }, [venueTaxonomyIds]);
-	}, [updateVenueTaxonomyIds]);
-
 	return (
 		<>
 			<ComboboxControl
@@ -144,7 +71,7 @@ const VenueTermsCombobox = ({ search, setSearch, ...props }) => {
 				__next40pxDefaultSize
 				onChange={ update }
 				onFilterValueChange={ setSearchDebounced }
-				options={ setOptions() }
+				options={ venueOptions }
 				value={ setValue() }
 			/>	
 		</>
