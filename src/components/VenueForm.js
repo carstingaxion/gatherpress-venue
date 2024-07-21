@@ -5,27 +5,25 @@ import {
 	Spinner,
 	Button,
 	TextControl,
-	__experimentalInputControl as InputControl,
 	__experimentalHStack as HStack,
 	__experimentalUseNavigator as useNavigator,
 } from '@wordpress/components';
 
-import { useState, useEffect, useRef } from 'react';
-import { select, useSelect, useDispatch } from '@wordpress/data';
+
+import { useState } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 
 import apiFetch from '@wordpress/api-fetch';
 
 import {
 	useEntityProp,
-	useEntityRecords,
 	store as coreDataStore
 } from '@wordpress/core-data';
 
-import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW, GPV_CLASS_NAME, VARIATION_OF } from './../helpers/namespace';
+import { PT_EVENT, PT_VENUE, TAX_VENUE_SHADOW } from './../helpers/namespace';
 
 import { isEventPostType } from '../helpers/event';
 import { getCurrentContextualPostId } from '../helpers/globals';
-import { getVenueTermFromPostId } from '../helpers/venue';
 
 
 function VenueForm( { title, onChangeTitle, address, onChangeAddress, hasEdits, lastError, isSaving, onCancel, onSave } ) {

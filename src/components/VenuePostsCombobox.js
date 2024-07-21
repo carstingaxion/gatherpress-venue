@@ -2,12 +2,10 @@
  * WordPress dependencies
  */
 import { ComboboxControl } from '@wordpress/components';
-import { useEntityRecords, useEntityProp } from '@wordpress/core-data';
-import { useEffect, useState, useCallback, useMemo } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 
-import { select, useSelect, useDispatch } from '@wordpress/data';
 /**
  * Internal dependencies.
  */

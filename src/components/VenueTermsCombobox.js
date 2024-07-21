@@ -2,12 +2,9 @@
  * WordPress dependencies
  */
 import { ComboboxControl } from '@wordpress/components';
-import { useEntityRecords, useEntityProp } from '@wordpress/core-data';
+import { useEntityProp } from '@wordpress/core-data';
 
-import { select, useSelect, useDispatch } from '@wordpress/data';
-
-// import { useState, useEffect, useRef } from 'react';
-import { useState, useCallback, useMemo, useEffect } from '@wordpress/element';
+import { useCallback } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
 

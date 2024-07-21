@@ -32,8 +32,6 @@ import { mapMarker } from '@wordpress/icons';
 /**
  * Internal dependencies
  */
-import { getCurrentContextualPostId } from './helpers/globals';
-
 import { VenueContext } from './components/VenueContext';
 
 
